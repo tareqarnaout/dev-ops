@@ -1,0 +1,535 @@
+// Just the Class dependencies
+@import 'card';
+
+// Just the Class styles
+@import 'announcement';
+@import 'module';
+@import 'schedule';
+@import 'staffer';
+
+// Overrides
+code {
+  font-size: 14px;
+  padding: 0.2em 0.4em;
+  border: none;
+}
+
+iframe {
+  max-width: 100%;
+}
+
+// details {
+//   @extend .mb-4;
+// }
+
+// summary {
+//   @extend .btn, .btn-outline;
+
+//   width: 100%;
+// }
+
+.main-content {
+  dl {
+    display: block;
+    grid-template-columns: none;
+  }
+
+  dt {
+    font-weight: bold;
+    text-align: start;
+
+    &::after {
+      content: normal;
+    }
+  }
+
+  dd {
+    + dt {
+      margin-top: 1em;
+    }
+  }
+}
+
+details.jtd-accordion summary {
+  
+  cursor: pointer;
+  padding: 0.3em;
+  background: #ffffff;   // light gray
+  border-radius: 3px;
+  list-style: none;
+}
+
+details.jtd-accordion[open] summary {
+  background: #e5e7eb;   // slightly darker when expanded
+}
+
+/* Animate all on summmary */
+summary {
+  transition: all 0.5s ease;
+  padding: 0.5em 1em;
+  font-weight: 400;
+}
+[open] summary {
+  padding: 1em 1em;
+}
+
+summary {
+  color: #646363;
+  cursor: pointer;
+  
+  /* Roll our own marker */
+  display: flex;
+  gap: 0.5em;
+  
+  &::marker {
+    content: "";
+    justify-self: end;
+  }
+
+  &::before {
+    content: "";
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgYmFzZVByb2ZpbGU9InRpbnkiIGhlaWdodD0iMjRweCIgaWQ9IkxheWVyXzEiIHZlcnNpb249IjEuMiIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMjRweCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PHBhdGggZD0iTTguNTg2LDUuNTg2Yy0wLjc4MSwwLjc4MS0wLjc4MSwyLjA0NywwLDIuODI4TDEyLjE3MSwxMmwtMy41ODUsMy41ODZjLTAuNzgxLDAuNzgxLTAuNzgxLDIuMDQ3LDAsMi44MjggIEM4Ljk3NiwxOC44MDUsOS40ODgsMTksMTAsMTlzMS4wMjQtMC4xOTUsMS40MTQtMC41ODZMMTcuODI5LDEybC02LjQxNS02LjQxNEMxMC42MzQsNC44MDUsOS4zNjYsNC44MDUsOC41ODYsNS41ODZ6Ii8+PC9zdmc+);
+    background-size: contain;
+    width: 1.1rem;
+    height: 1.1rem;
+    aspect-ratio: 1;
+    display: block;
+    transform: translateY(4px) rotate(90deg);
+    transition: transform 0.5s ease;
+    transform-origin: 50% 50%;
+    margin-right: 0.5em; /* space between arrow and text */
+  }
+
+  /* Rotate arrow when open */
+  [open] &::before {
+    transform: translateY(4px) rotate(270deg);
+  }
+
+
+  /* Hover state */
+  &:hover {
+    color: #666666;
+  }
+}
+
+.details-content-wrapper {
+
+  /* We need margin-trim … */
+  :first-child { margin-top: 0; }
+  :last-child { margin-bottom: 0; }
+}
+
+::details-content {
+  transition: all 0.5s ease, content-visibility 0.5s allow-discrete;
+  height: 0;
+  overflow: clip;
+}
+@supports (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+  
+  ::details-content {
+    padding-inline: 1em;
+  }
+
+  [open]::details-content {
+    height: auto;
+    padding: 1em 1em;
+  }
+}
+@supports not (interpolate-size: allow-keywords) {
+  [open]::details-content {
+    height: 150px; /* In the future to be replaced by `height: auto` */
+    overflow-y: scroll; /* In case the contents should be taller than 150px */
+  }
+}
+
+
+
+/* Reduce vertical space between accordions */
+.main-content details.jtd-accordion {
+  margin: 0 !important;
+}
+
+/* Make stacked summaries sit closer together */
+.main-content details.jtd-accordion summary {
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+}
+
+/* Optional: when expanded, don’t double the space */
+.main-content details.jtd-accordion[open] summary {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+
+.grade-table-wrapper {
+  display: inline-block;
+  max-width: 580px;
+  margin: auto;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.grade-table {
+  border-collapse: collapse;
+  width: 100%; /* let it use the wrapper’s width */
+  min-width: 300px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  table-layout: fixed; /* ensures column width rules apply */
+}
+
+/* Header row */
+.grade-table thead th {
+  background-color: #293150;
+  color: white;
+  text-align: center;
+  padding: 5px 14px;
+}
+
+/* Body rows */
+.grade-table td {
+  padding: 8px 14px;
+}
+
+/* Alternating row shading */
+.grade-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Footer */
+.grade-table tfoot td {
+  background-color: #efefef;
+  font-weight: bold;
+  padding: 5px 14px;
+}
+
+/* Column-specific styles */
+.grade-table th:nth-child(1),
+.grade-table td:nth-child(1) {
+  width: 30%;     /* make first column larger */
+  text-align: left;
+}
+
+.grade-table th:nth-child(2),
+.grade-table td:nth-child(2) {
+  width: 15%;     /* keep weight column narrow */
+  text-align: center; /* center weight values */
+}
+
+.grade-table th:nth-child(3),
+.grade-table td:nth-child(3) {
+  width: 55%;     /* description fills remaining space */
+  text-align: left;
+}
+
+/* Full width wrapper for Do/Don't table */
+.do-dont-table-wrapper {
+  max-width: 100%;  /* override grade table wrapper width */
+}
+
+/* Override grade table column widths for Do/Don't table */
+.do-dont-table th:nth-child(1),
+.do-dont-table td:nth-child(1),
+.do-dont-table th:nth-child(2),
+.do-dont-table td:nth-child(2) {
+  width: 50%; /* force equal width */
+  text-align: left;
+}
+
+.do-dont-table td:nth-child(1),
+.do-dont-table td:nth-child(2) {
+  padding: 14px 14px;
+}
+
+/* Header colors */
+.do-dont-table thead th:nth-child(1) {
+  background-color: #293150; /* dark blue */
+  color: white;
+}
+
+.do-dont-table thead th:nth-child(2) {
+  background-color: #8B0000; /* very dark red */
+  color: white;
+}
+
+
+
+/* Custom purple label */
+.label-dark-gray {
+  background-color: #646363; /* dark gray background */
+  color: white;              /* white text */
+}
+
+.fancy-quote {
+  color: #555;             /* gray text */
+  font-style: italic;      /* italics */
+  margin-left: 2em;        /* extra indentation */
+  border-left: 0.25em solid #ccc; /* optional subtle bar */
+  padding-left: 1em;       /* spacing inside */
+}
+
+body {
+    font-family: "Open Sans", sans-serif;  /* different font face */
+}
+
+.katex-display {
+  font-size: 1.2em;  /* block equations */
+}
+
+.highlight > *:first-child {
+  margin-top: 1rem;  /* adjust as needed */
+}
+
+
+
+/* ==============================
+   Expandable Code Block Styles
+   ============================== */
+.expandable-code {
+    margin: 20px 0;
+}
+
+/* Header / Summary */
+.expandable-code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #2d3748;
+    color: white;
+    padding: 8px 8px;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    transition: background-color 0.5s;
+}
+
+.expandable-code-header:hover {
+    background: #4a5568;
+}
+
+.expandable-code-title {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+// .expandable-toggle-btn {
+//     background: none;
+//     border: none;
+//     color: white;
+//     font-size: 14px;
+//     cursor: pointer;
+//     padding: 0;
+//     transition: transform 0.5s ease;
+// }
+
+.expandable-toggle-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.3em; /* space between arrow and label */
+}
+
+/* Arrow as a small triangle */
+.expandable-arrow {
+    display: inline-block;
+    width: 0.7em;
+    height: 0.7em;
+    border-right: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(45deg); /* points down initially */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-right: 0.3em;
+}
+
+/* Rotate arrow when expanded */
+.expandable-toggle-btn.expanded .expandable-arrow {
+    transform: rotate(-135deg); /* points up */
+}
+
+/* Label next to arrow */
+.expandable-label {
+    font-weight: normal;
+    font-size: 0.9em;
+}
+
+
+
+/* Triangle rotation */
+.expandable-toggle-btn::before {
+    content: "";
+    display: inline-block;
+    margin-right: 0.3em;
+    transition: transform 0.8s ease;
+    transform: rotate(0deg); /* points down when collapsed */
+}
+
+.expandable-toggle-btn.expanded::before {
+    transform: rotate(180deg); /* points up when expanded */
+}
+
+.expandable-toggle-btn .expandable-label {
+    font-weight: normal;
+    font-size: 0.9em;
+}
+
+/* Collapsible content */
+.expandable-code-content {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease;
+    border-radius: 0 0 0px 0px;
+}
+
+.expandable-code-content.expanded {
+    max-height: 1000px; /* large enough for most code blocks */
+}
+
+/* Wrapper with dark background and padding */
+.expandable-code-wrapper {
+    position: relative;
+    background: #1a202c;
+    border-radius: 0 0 6px 6px;
+    padding: 0px;
+    overflow: hidden;
+    color: #f8f8f2;
+}
+
+/* Copy button */
+.expandable-copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+    background: #4299e1;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.expandable-copy-btn:hover {
+    background: #3182ce;
+}
+
+/* Code block formatting */
+.expandable-code-block {
+    font-family: 'Source Code Pro', 'Roboto Mono', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Make Rouge-generated code match wrapper background */
+.expandable-code-block .highlight,
+.expandable-code-block pre,
+.expandable-code-block code {
+    background: transparent !important;
+    color: inherit;
+}
+
+/* ==============================
+   Rouge Syntax Highlighting Colors
+   ============================== */
+
+/* VS Code Dark+ Syntax Highlighting */
+.expandable-code-block pre span.k,
+.expandable-code-block pre span.kd  { color: #bc8abc !important;}  /* keyword */
+.expandable-code-block pre span.o  { color: #d4d4d4; }  /* operator */
+.expandable-code-block pre span.nf { color: #dcdcaa; }  /* function definitions */
+.expandable-code-block pre span.nx,
+.expandable-code-block pre span.nt { color: #dcdcaa; }  /* function calls */
+.expandable-code-block pre span.nb { color: #4ec9b0; }  /* built-in names */
+.expandable-code-block pre span.no { color: #b5cea8; }  /* constants */
+.expandable-code-block pre span.s  { color: #ce9178; font-style: italic; } /* strings + docstrings */
+.expandable-code-block pre span.m  { color: #b5cea8; }  /* numbers */
+.expandable-code-block pre span.p  { color: #d4d4d4; }  /* punctuation */
+.expandable-code-block pre span.n,
+.expandable-code-block pre span.nv { color: #9cdcfe; }  /* variables */
+
+.expandable-code-block pre span.nn { /* Module / class names */
+    color: #4ec9b0; 
+}
+/* Comments - green + italic */
+.expandable-code-block pre span.c,
+.expandable-code-block pre span.cm,
+.expandable-code-block pre span.cp,
+.expandable-code-block pre span.c1,
+.expandable-code-block pre span.cs {
+    color: #6a9955;
+    font-style: italic;
+}
+
+
+.schedule-note {
+  background-color: #fff4e5;       /* soft warning color */
+  border-left: 4px solid #ffa500;  /* accent color */
+  padding: 0.75em 1em;
+  margin: 0.5em 0 1em 0;           /* top/bottom spacing */
+  font-size: 0.9em;
+  color: #333;
+  border-radius: 4px;
+}
+
+
+
+/* Vertical center staff text next to photo */
+.staffer {
+  display: flex;
+  align-items: center; /* Vertically center text beside the image */
+}
+
+.pt-container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e5e5;
+  background: #fff;
+}
+
+.pt-container iframe {
+  width: 100%;
+  height: 400px;
+  border: 0;
+  border-radius: 8px;
+}
+
+
+/* Container to match your original styling */
+.video-container {
+    /* Uses your original class's width */
+    width: 75%; 
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    display: block;
+    margin: 20px auto;
+
+    /* Aspect Ratio Box CSS */
+    position: relative;
+    padding-bottom: 56.25%; /* This sets the 16:9 height (9/16 * 100) */
+    height: 0; /* Necessary for the padding-bottom trick */
+    overflow: hidden;
+}
+
+/* Make the iframe fill the container exactly */
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}

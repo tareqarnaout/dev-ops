@@ -1,0 +1,10 @@
+<div class="page-meta" style="font-size:0.85em; color:#666; text-align:center; margin-bottom:0rem; padding-bottom:0;">
+  {% if page.author %}
+    <span>© {{ page.author }}.</span>
+  {% endif %}
+  {% if page.last_modified_at %}
+    <span> · Last modified: {{ page.last_modified_at | date: "%b %d, %Y" }}</span>
+  {% else %}
+    <span> · Last updated: {{ page.date | date: "%b %d, %Y" }}</span>
+  {% endif %}
+</div>

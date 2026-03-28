@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Heavy Box Game</title>
+<style>
+  body {
+    font-family: "Segoe UI", sans-serif;
+    background: #f2f2f2;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  #topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 2;
+  }
+
+  #counter {
+    font-size: 20px;
+    font-weight: bold;
+    background: #eef6ff;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 2px solid #0077cc;
+    color: #0077cc;
+  }
+
+  #weighBtn {
+  position: absolute;
+  bottom: 10px;          /* slightly above the bottom of the scale */
+  left: 50%;             /* center horizontally */
+  transform: translateX(-50%);
+  background: #0077cc;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+  z-index: 10;           /* make sure it’s above baskets */
+}
+
+#weighBtn:hover { background: #005fa3; }
+
+
+  #weighBtn:hover { background: #005fa3; }
+
+  #play-area {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 60px);
+  }
+
+  .box {
+    width: 35px;
+    height: 35px;
+    background: black;
+    border-radius: 6px;
+    position: absolute;
+    cursor: grab;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+
+  .selected { outline: 3px solid #00ccff; }
+
+  #selectionBox {
+    position: absolute;
+    border: 2px dashed #00ccff;
+    background: rgba(0, 204, 255, 0.2);
+    display: none;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  #scale {
+    position: absolute;
+    bottom: 200px;
+    left: 60%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 350px;
+  }
+
+  .beam {
+    position: absolute;
+    bottom: 320px;
+    left: 50%;
+    width: 700px;
+    height: 10px;
+    background: #666;
+    border-radius: 4px;
+    transform: translateX(-50%);
+    transform-origin: center center;
+    transition: transform 0.8s ease;
+  }
+
+
+.basket {
+  position: absolute;
+  width: 300px;
+  height: 400px;
+  background: rgba(0,0,0,0.05);
+  border: 3px solid #555;
+  border-radius: 16px;
+  transition: box-shadow 0.3s;
+  pointer-events: none;
+  top: 40px;             /* ✅ sits below the beam */
+}
+
+  .basket.left { left: 450px; bottom: 0; }
+  .basket.right { right: 450px; bottom: 0; }
+
+#solution {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 100px;
+  height: 100px;
+  border: 3px dashed #009966;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;     /* ✅ center multi-line text */
+  font-size: 14px;
+  line-height: 1.3;       /* better readability */
+  color: #009966;
+  background: rgba(0, 153, 102, 0.05);
+}
+
+#explanation {
+  flex: 1;                   /* take remaining space */
+  margin: 0 20px;
+  font-size: 14px;
+  color: #333;
+  text-align: center;
+}
+
+#playAgainBtn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#playAgainBtn:hover { background: #218838; }
+
+
+  #result {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .flash { box-shadow: 0 0 20px 5px rgba(0, 200, 255, 0.7); }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div id="counter">Comparisons: 0</div>
+  <div id="explanation">
+    One of the black boxes is heavier than the others. Which one is it? Your goal is to minimize your use of the scale.
+  </div>
+  <button id="playAgainBtn" style="display:none;">Play Again</button>
+</div>
+
+
+<div id="play-area">
+  <div id="scale">
+    <div class="beam"></div>
+    <div class="basket left"></div>
+    <div class="basket right"></div>
+    <button id="weighBtn">Weigh</button>
+  </div>
+  <div id="solution">Drop Heavy Box Here</div>
+  <div id="result"></div>
+  <div id="selectionBox"></div>
+</div>
+
+<script>
+const playArea = document.getElementById("play-area");
+const leftBasket = document.querySelector(".basket.left");
+const rightBasket = document.querySelector(".basket.right");
+const beam = document.querySelector(".beam");
+const counterDisplay = document.getElementById("counter");
+const resultDisplay = document.getElementById("result");
+const solutionArea = document.getElementById("solution");
+const weighBtn = document.getElementById("weighBtn");
+const selectionBox = document.getElementById("selectionBox");
+
+let boxes = [];
+let heavyIndex;
+let selected = new Set();
+let comparisons = 0;
+
+// Interaction state variables
+let isDragging = false;
+let isSelecting = false;
+let dragItems = [];
+let startMouse = {x:0, y:0};
+let startPositions = [];
+let selectStart = {x:0, y:0};
+
+function initGame() {
+  playArea.querySelectorAll(".box").forEach(b => b.remove());
+  resultDisplay.textContent = "";
+  selected.clear();
+  comparisons = 0;
+  counterDisplay.textContent = "Comparisons: 0";
+
+  boxes = Array(64).fill(1);
+  heavyIndex = Math.floor(Math.random() * 64);
+  boxes[heavyIndex] = 2;
+
+  let cols = 8;
+  for (let i = 0; i < boxes.length; i++) {
+    const div = document.createElement("div");
+    div.classList.add("box");
+    div.dataset.index = i;
+    let row = Math.floor(i / cols);
+    let col = i % cols;
+    div.style.left = (50 + col * 45) + "px";
+    div.style.top = (160 + row * 45) + "px";
+    playArea.appendChild(div);
+  }
+}
+
+function getBoxesIn(rect) {
+  return Array.from(document.querySelectorAll(".box")).filter(b => {
+    let br = b.getBoundingClientRect();
+    return !(br.right < rect.left || br.left > rect.right ||
+             br.bottom < rect.top || br.top > rect.bottom);
+  });
+}
+
+function updateScale() {
+  let leftWeight = 0, rightWeight = 0;
+  
+  // Basket positions relative to playArea
+  let playRect = playArea.getBoundingClientRect();
+  let lRect = leftBasket.getBoundingClientRect();
+  let rRect = rightBasket.getBoundingClientRect();
+
+  // Adjust to playArea coords
+  lRect = {
+    left: lRect.left - playRect.left,
+    right: lRect.right - playRect.left,
+    top: lRect.top - playRect.top,
+    bottom: lRect.bottom - playRect.top
+  };
+  rRect = {
+    left: rRect.left - playRect.left,
+    right: rRect.right - playRect.left,
+    top: rRect.top - playRect.top,
+    bottom: rRect.bottom - playRect.top
+  };
+
+  document.querySelectorAll(".box").forEach(b => {
+    let bx = parseInt(b.style.left) + b.offsetWidth / 2; // center x
+    let by = parseInt(b.style.top) + b.offsetHeight / 2; // center y
+    let idx = parseInt(b.dataset.index);
+    
+    if (bx >= lRect.left && bx <= lRect.right && by >= lRect.top && by <= lRect.bottom) {
+      leftWeight += boxes[idx];
+    } else if (bx >= rRect.left && bx <= rRect.right && by >= rRect.top && by <= rRect.bottom) {
+      rightWeight += boxes[idx];
+    }
+  });
+
+  comparisons++;
+  counterDisplay.textContent = "Comparisons: " + comparisons;
+
+  if (leftWeight > rightWeight) beam.style.transform = "translateX(-50%) rotate(15deg)"; // left down
+  else if (rightWeight > leftWeight) beam.style.transform = "translateX(-50%) rotate(-15deg)"; // right down
+  else beam.style.transform = "translateX(-50%) rotate(0deg)";
+
+
+  [beam, leftBasket, rightBasket].forEach(el => el.classList.add("flash"));
+  setTimeout(() => [beam, leftBasket, rightBasket].forEach(el => el.classList.remove("flash")), 400);
+}
+
+let gameOver = false;
+
+function checkSolution() {
+  if (gameOver) return;
+
+  let sRect = solutionArea.getBoundingClientRect();
+  let inside = getBoxesIn(sRect);
+  if (inside.length === 1) {
+    let idx = parseInt(inside[0].dataset.index);
+    if (boxes[idx] === 2) resultDisplay.textContent = "🎉 Correct! You found the heavy box.";
+    else resultDisplay.textContent = "❌ Wrong box!";
+    
+    // End the game
+    gameOver = true;
+
+    // Show Play Again button
+    document.getElementById("playAgainBtn").style.display = "inline-block";
+  }
+}
+
+// Disable dragging/moving if game is over
+playArea.addEventListener("mousedown", e => {
+  if (gameOver) return;
+  // existing code for dragging and selection...
+});
+
+// Play Again button logic
+document.getElementById("playAgainBtn").addEventListener("click", () => {
+  initGame();                 // reset game
+  gameOver = false;
+  document.getElementById("playAgainBtn").style.display = "none";
+});
+
+/*
+function checkSolution() {
+  let sRect = solutionArea.getBoundingClientRect();
+  let inside = getBoxesIn(sRect);
+  if (inside.length === 1) {
+    let idx = parseInt(inside[0].dataset.index);
+    if (boxes[idx] === 2) resultDisplay.textContent = "🎉 Correct! You found the heavy box.";
+    else resultDisplay.textContent = "❌ Wrong box!";
+  }
+}*/
+
+// FIXED: Properly separated event handling
+playArea.addEventListener("mousedown", e => {
+  // Reset all interaction states
+  isDragging = false;
+  isSelecting = false;
+  
+  if (e.target.classList.contains("box")) {
+    // BOX CLICK/DRAG MODE
+    e.preventDefault(); // Prevent any other handlers
+    
+    // Handle selection logic
+    if (!e.metaKey && !e.ctrlKey) {
+      // Only clear selection if clicking on an unselected box
+      if (!selected.has(e.target)) {
+        selected.forEach(b => b.classList.remove("selected"));
+        selected.clear();
+      }
+    }
+
+    if ((e.metaKey || e.ctrlKey) && selected.has(e.target)) {
+      // Deselect if already selected and holding modifier
+      selected.delete(e.target);
+      e.target.classList.remove("selected");
+    } else if (!selected.has(e.target)) {
+      // Only select the box if it's not already selected
+      selected.add(e.target);
+      e.target.classList.add("selected");
+    }
+
+    // Prepare for dragging
+    isDragging = true;
+    dragItems = Array.from(selected);
+    startMouse = {x: e.clientX, y: e.clientY};
+    startPositions = dragItems.map(b => ({
+      x: parseInt(b.style.left), 
+      y: parseInt(b.style.top)
+    }));
+
+  } else {
+    // MARQUEE SELECTION MODE
+    e.preventDefault(); // Prevent any other handlers
+    
+    isSelecting = true;
+    // Use consistent coordinate system
+    let rect = playArea.getBoundingClientRect();
+    selectStart = {x: e.clientX - rect.left, y: e.clientY - rect.top};
+    
+    // Setup selection box
+    selectionBox.style.left = selectStart.x + "px";
+    selectionBox.style.top = selectStart.y + "px";
+    selectionBox.style.width = "0px";
+    selectionBox.style.height = "0px";
+    selectionBox.style.display = "block";
+
+    // Clear existing selection only if not holding modifier
+    if (!e.metaKey && !e.ctrlKey) {
+      selected.forEach(b => b.classList.remove("selected"));
+      selected.clear();
+    }
+  }
+});
+
+playArea.addEventListener("mousemove", e => {
+  if (isDragging) {
+    // DRAG BOXES
+    let dx = e.clientX - startMouse.x;
+    let dy = e.clientY - startMouse.y;
+    dragItems.forEach((b, i) => {
+      b.style.left = (startPositions[i].x + dx) + "px";
+      b.style.top = (startPositions[i].y + dy) + "px";
+    });
+    
+  } else if (isSelecting) {
+    // UPDATE MARQUEE SELECTION
+    // Use consistent coordinate system
+    let rect = playArea.getBoundingClientRect();
+    let currentX = e.clientX - rect.left;
+    let currentY = e.clientY - rect.top;
+    
+    let x1 = Math.min(currentX, selectStart.x);
+    let y1 = Math.min(currentY, selectStart.y);
+    let x2 = Math.max(currentX, selectStart.x);
+    let y2 = Math.max(currentY, selectStart.y);
+
+    selectionBox.style.left = x1 + "px";
+    selectionBox.style.top = y1 + "px";
+    selectionBox.style.width = (x2 - x1) + "px";
+    selectionBox.style.height = (y2 - y1) + "px";
+
+    // Update live selection
+    let selRect = selectionBox.getBoundingClientRect();
+    document.querySelectorAll(".box").forEach(b => {
+      let br = b.getBoundingClientRect();
+      let overlaps = !(br.right < selRect.left || br.left > selRect.right || 
+                      br.bottom < selRect.top || br.top > selRect.bottom);
+      
+      if (overlaps) {
+        if (!selected.has(b)) {
+          selected.add(b);
+          b.classList.add("selected");
+        }
+      } else if (!e.metaKey && !e.ctrlKey) {
+        // Only deselect if not holding modifier
+        if (selected.has(b)) {
+          selected.delete(b);
+          b.classList.remove("selected");
+        }
+      }
+    });
+  }
+});
+
+playArea.addEventListener("mouseup", e => {
+  if (isDragging) {
+    isDragging = false;
+    dragItems = [];
+    checkSolution();
+  }
+  
+  if (isSelecting) {
+    isSelecting = false;
+    selectionBox.style.display = "none";
+  }
+});
+
+weighBtn.addEventListener("click", updateScale);
+
+initGame();
+</script>
+</body>
+</html>

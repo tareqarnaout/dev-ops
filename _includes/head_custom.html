@@ -1,0 +1,12 @@
+{% assign math = page.math | default: layout.math | default: site.math %}
+
+{% case math %}
+  {% when "katex" %}
+    {% include katex.html %}
+{% endcase %}
+
+<!-- Expandable Code Blocks -->
+<script defer src="{{ '/assets/js/expandable-code.js' | relative_url }}"></script>
+
+<link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+<script defer src="https://pyscript.net/latest/pyscript.js"></script>
