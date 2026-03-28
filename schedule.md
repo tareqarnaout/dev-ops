@@ -2,6 +2,7 @@
 layout: page
 title: 3. Course Schedule
 description: Weekly course schedule, including readings, quizzes, and assignments.
+nav_exclude: true
 ---
 
 # Schedule

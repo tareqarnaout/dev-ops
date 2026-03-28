@@ -3,6 +3,7 @@ layout: page
 title: 6. Resources
 description: >-
     Extra resources
+nav_exclude: true
 ---
 
 # Extra Resources

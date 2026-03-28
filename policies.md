@@ -3,6 +3,7 @@ layout: page
 title: 4. Policies
 description: >-
     Course policies.
+nav_exclude: true
 ---
 
 <style>

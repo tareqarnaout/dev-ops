@@ -3,6 +3,7 @@ layout: page
 title: 7. Programming with GenAI
 description: >-
     What does it mean to program with GenAI?
+nav_exclude: true
 ---
 <style>
 h2 {

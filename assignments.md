@@ -2,6 +2,7 @@
 layout: page
 title: 5. Assignments
 description: Description of the course assignments.
+nav_exclude: true
 ---
 
 # Assignment 1

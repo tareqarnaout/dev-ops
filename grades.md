@@ -3,6 +3,7 @@ layout: page
 title: 9. Grades Sheet
 description: >-
     Student Grades.
+nav_exclude: true
 ---
 
 ## Grade Portal
