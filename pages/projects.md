@@ -1,10 +1,10 @@
 ---
 layout: page
-title: 3. Projects
+title: 3.2 How to Deal with Images
 description: Project pages and practical guides.
 permalink: /projects/
-has_children: true
-nav_order: 3
+parent: 3. First Project: How to Deal with Images
+nav_order: 2
 ---
 
 # Projects

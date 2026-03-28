@@ -1,8 +1,8 @@
 ---
 layout: page
-title: 3. Course Schedule
+title: 1. Course Info
 description: Weekly course schedule based on the official DevOps syllabus.
-nav_exclude: true
+nav_order: 1
 permalink: /schedule/
 ---
 
