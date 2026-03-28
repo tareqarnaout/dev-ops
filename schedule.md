@@ -1,94 +1,28 @@
 ---
 layout: page
 title: 3. Course Schedule
-description: Weekly course schedule, including readings, quizzes, and assignments.
+description: Weekly course schedule based on the official DevOps syllabus.
 nav_exclude: true
 ---
 
 # Schedule
 
-<div style="margin-bottom:1em;">
-  <button id="toggle-su-tue-thu" class="btn">Su/Tue/Thu</button>
-  <button id="toggle-mo-we" class="btn">Mo/We</button>
-</div>
+<span style="font-size: 0.9em; color: gray;">Class schedule: Mon/Wed, 02:00 - 03:30</span>
 
-<div id="schedule-su-tue-thu">
-  {% for module in site.modules_su_tue_thu %}
-    {% if module.note %}
-      <div class="schedule-note">
-      {{ module.note }}
-      </div>
-    {% endif %}
-    {% include module-su-tue-thu.html module=module %}
-  {% endfor %}
-</div>
+## Weekly Plan (From Official Syllabus)
 
-<div id="schedule-mo-we" style="display:none;">
-  {% for module in site.modules_mo_we %}
-    {% if module.note %}
-      <div class="schedule-note">
-      {{ module.note }}
-      </div>
-    {% endif %}
-    {% include module-mo-we.html module=module %}
-  {% endfor %}
-</div>
+| Week(s) | Topic(s) |
+|:--|:--|
+| 1-2 | Introduction to SDLC and DevOps. Work with Linux OS. Manage source code using Git. |
+| 2-5 | Introduction to Docker. Practical Workshop (1): Deploy 3-tier application using Docker. |
+| 6-7 | Introduce a CI/CD pipeline. Practical Workshop (2): Design and implement a simple CI/CD pipeline. |
+| 8 | Mid Exam |
+| 9-11 | Introduction to Kubernetes and Helm. Practical Workshop (3): Deploy Django application using Kubernetes and Helm. |
+| 12-14 | Practical Workshop (3): Integrate Docker, Kubernetes, Helm, and CI/CD pipeline. |
+| 15 | Project presentation and evaluation |
+| 16 | Final Exam |
 
-{% raw %}
-<script>
-(function() {
-  function init() {
-    var su = document.getElementById("schedule-su-tue-thu");
-    var mo = document.getElementById("schedule-mo-we");
-    var btnSu = document.getElementById("toggle-su-tue-thu");
-    var btnMo = document.getElementById("toggle-mo-we");
-    
-    if (!su || !mo || !btnSu || !btnMo) return;
-    
-    btnSu.style.backgroundColor = "#007cba";
-    btnSu.style.color = "white";
-    btnMo.style.padding = "2px 16px";
-    btnSu.style.padding = "2px 16px";
+## Notes
 
-    btnSu.onclick = function() {
-      su.style.display = "block";
-      mo.style.display = "none";
-      btnSu.style.backgroundColor = "#007cba";
-      btnSu.style.color = "white";
-      btnMo.style.backgroundColor = "#f0f0f0";
-      btnMo.style.color = "#333";
-    };
-    
-    btnMo.onclick = function() {
-      su.style.display = "none";
-      mo.style.display = "block";
-      btnMo.style.backgroundColor = "#007cba";
-      btnMo.style.color = "white";
-      btnSu.style.backgroundColor = "#f0f0f0";
-      btnSu.style.color = "#333";
-    };
-  }
-  
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
-</script>
-{% endraw %}
-
-
-
-
-<!-- ---
-layout: page
-title: 3. Course Schedule
-description: Weekly course schedule, including readings, quizzes, and assignments.
----
-
-# Schedule
-
-{% for module in site.modules %}
-{{ module }}
-{% endfor %} -->
+- The schedule above follows the official syllabus document.
+- Any date-level adjustments announced during the semester will be shared in class/announcements.
