@@ -1,7 +1,7 @@
 ---
 layout: home
 title: 1. Course Info
-permalink: /:path/
+permalink: /syllabus/
 seo:
   type: Course
   name: DevOps
@@ -76,7 +76,7 @@ No specific prerequisite is listed in the official syllabus.
 
 - [Slides]({{ '/slides-page/' | relative_url }})
 - [Schedule]({{ '/schedule/' | relative_url }})
-- [Assignments]({{ '/assignments/' | relative_url }})
+- [First Project]({{ '/first-project/' | relative_url }})
 
 ## Tools
 
@@ -88,4 +88,4 @@ No specific prerequisite is listed in the official syllabus.
 
 ## Notes
 
-For exact dates, deadlines, and weekly scope, follow the schedule and announcements pages throughout the semester.
+For exact dates, deadlines, and weekly scope, follow the schedule page and in-class announcements throughout the semester.

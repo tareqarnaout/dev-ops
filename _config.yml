@@ -19,7 +19,17 @@ description: Spring 2026 course website for DevOps at Princess Sumaya University
 author: Tareq Arnaout
 baseurl: '/dev-ops' # the subpath of your site, e.g. /blog
 url: 'https://tareqarnaout.github.io' # the base hostname & protocol for your site, e.g. http://example.com
-exclude: ["Gemfile", "Gemfile.lock", "LICENSE"]
+exclude:
+  - "Gemfile"
+  - "Gemfile.lock"
+  - "LICENSE"
+  - "lesson-plans"
+  - "lessons"
+  - "_announcements"
+  - "_modules_mo_we"
+  - "_modules_su_tue_thu"
+  - "_schedules"
+  - "_staffers"
 
 # Theme settings
 remote_theme: just-the-docs/just-the-docs@v0.10.1
@@ -32,44 +42,8 @@ aux_links: {}
   
 # footer_content: "This website was created using the <a href='https://github.com/kevinlin1/just-the-class'>Just the Class</a> template."
 
-# Collections for website data
-collections:
-  staffers:
-  modules:
-  schedules:
-  announcements:
-  modules_su_tue_thu:
-    output: false
-  modules_mo_we:
-    output: false
-
-
-
-# Default layouts for each collection type
-defaults:
-  - scope:
-      path: ''
-      type: staffers
-    values:
-      layout: staffer
-      height: 300
-      subpath: '/assets/images/'
-      width: 300
-  - scope:
-      path: ''
-      type: modules
-    values:
-      layout: module
-  - scope:
-      path: ''
-      type: schedules
-    values:
-      layout: schedule
-  - scope:
-      path: ''
-      type: announcements
-    values:
-      layout: announcement
+# Default front matter values
+defaults: []
 
 compress_html:
   clippings: all
