@@ -1,8 +1,10 @@
 ---
 layout: page
-title: 4. Simple JavaScript MongoDB App
+title: 3.2 Simple JavaScript MongoDB App
 description: Copy-ready Node.js project to test MongoDB Docker connectivity.
 permalink: /simple-js-app/
+parent: 3. Projects
+nav_order: 2
 ---
 
 # Node.js MongoDB Connection Test Project
