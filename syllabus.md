@@ -9,7 +9,7 @@ seo:
 
 # DevOps
 {:.no_toc}
-<span style="font-size: 0.8em; font-weight: normal; color: gray;">Princess Sumaya University for Technology - Spring 2026</span>
+<span style="font-size: 0.8em; font-weight: normal; color: gray;">Princess Sumaya University for Technology - Spring 2025</span>
 {:.no_toc}
 
 ## Table of contents
@@ -22,22 +22,26 @@ seo:
 
 ## Course Overview
 
-This course introduces modern DevOps practices with a strong hands-on focus. You will learn how software moves from source code to running services through containerization, automation, and practical delivery workflows.
+This course provides a practical, hands-on approach to modern DevOps practices used in enterprise environments. It focuses on the key tools, workflows, and methodologies required to build, deploy, and operate scalable software systems.
 
-The course emphasizes doing, not only reading. Every module combines core concepts with practical activities so you can apply DevOps principles directly.
+The course introduces core DevOps concepts and tools including version control, infrastructure as code, configuration management, containerization, and orchestration. It also covers monitoring practices and CI/CD pipelines for automated build, testing, and deployment across multiple environments.
+
+Additional focus areas include cloud infrastructure provisioning, system reliability, troubleshooting, and DevOps automation techniques.
 
 ## Prerequisites
 
-Basic command-line familiarity and a willingness to practice regularly are expected. Prior experience with Docker is helpful but not required.
+No specific prerequisite is listed in the official syllabus.
 
 ## Core Topics
 
-- DevOps foundations and lifecycle.
-- Containerization principles and use cases.
-- Docker architecture and how it works under the hood.
-- Docker images, containers, and Dockerfiles.
-- Docker CLI workflows for build, run, inspect, and debug.
-- Practical implementation patterns for real projects.
+- Introduction to SDLC and DevOps.
+- Linux operating system basics.
+- Source code management using Git.
+- Docker fundamentals and 3-tier deployment workshop.
+- CI/CD pipeline design and implementation workshop.
+- Kubernetes and Helm deployment workshop.
+- Integrated workshop using Docker, Kubernetes, Helm, and CI/CD.
+- Project presentation and evaluation.
 
 ## Assessments & Grades
 
@@ -49,19 +53,16 @@ Basic command-line familiarity and a willingness to practice regularly are expec
            <th>Description</th></tr>
     </thead>
     <tbody>
-      <tr> <td>Quizzes</td>
-           <td>12%</td>
-           <td>In-class quizzes assessing understanding of concepts and hands-on skills.</td>
+       <tr> <td>Activities (Quizzes, Homework, Projects, Coursera)</td>
+         <td>30%</td>
+         <td>Continuous assessment throughout the course duration.</td>
            </tr>
-      <tr> <td>Assignments</td>
-           <td>8%</td>
-           <td>Practical tasks aligned with tooling and workflows used in class.</td></tr>
-      <tr> <td>Midterm Exam</td>
+       <tr> <td>Mid Exam</td>
            <td>30%</td>
-           <td>Coverage will include conceptual and applied DevOps topics.</td></tr>
+         <td>Date to be announced (TBD).</td></tr>
       <tr> <td>Final Exam</td>
-           <td>50%</td>
-           <td>Comprehensive assessment of all course material.</td></tr>
+         <td>40%</td>
+         <td>Date to be announced (TBD).</td></tr>
     </tbody>
     <tfoot>
       <tr><td>Total</td>
@@ -79,10 +80,11 @@ Basic command-line familiarity and a willingness to practice regularly are expec
 
 ## Tools
 
-- Docker Desktop
-- VS Code
-- Git and GitHub
-- Terminal (Linux/macOS/WSL)
+- Linux environment and terminal tools
+- Git
+- Docker
+- Kubernetes and Helm
+- CI/CD tooling used in practical workshops
 
 ## Notes
 
