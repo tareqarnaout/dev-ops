@@ -1,6 +1,6 @@
 ---
 layout: page
-title: 4. Slides
+title: 2. Slides
 description: Access all course slide decks.
 permalink: /slides-page/
 ---

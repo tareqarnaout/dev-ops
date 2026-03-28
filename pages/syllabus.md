@@ -77,6 +77,7 @@ No specific prerequisite is listed in the official syllabus.
 - [Slides]({{ '/slides-page/' | relative_url }})
 - [Schedule]({{ '/schedule/' | relative_url }})
 - [First Project]({{ '/first-project/' | relative_url }})
+- [Simple JavaScript MongoDB App]({{ '/simple-js-app/' | relative_url }})
 
 ## Tools
 
