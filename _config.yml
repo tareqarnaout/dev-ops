@@ -22,6 +22,9 @@ url: 'https://tareqarnaout.github.io' # the base hostname & protocol for your si
 exclude:
   - "Gemfile"
   - "Gemfile.lock"
+  - "vendor"
+  - "vendor/bundle"
+  - ".bundle"
   - "LICENSE"
   - "lesson-plans"
   - "lessons"

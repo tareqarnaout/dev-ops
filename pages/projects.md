@@ -1,6 +1,6 @@
 ---
 layout: page
-title: 3. First Project: How to Deal with Images
+title: "3. First Project: How to Deal with Images"
 description: First project overview and related implementation pages.
 permalink: /projects/
 has_children: true

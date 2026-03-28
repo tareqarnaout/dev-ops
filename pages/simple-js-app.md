@@ -1,9 +1,9 @@
 ---
 layout: page
-title: 3.1 Node.js MongoDB Connection Test Project
+title: "3.1 Node.js MongoDB Connection Test Project"
 description: Copy-ready Node.js project to test MongoDB Docker connectivity.
 permalink: /simple-js-app/
-parent: 3. First Project: How to Deal with Images
+parent: "3. First Project: How to Deal with Images"
 nav_order: 1
 ---
 
