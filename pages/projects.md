@@ -9,6 +9,8 @@ nav_order: 3
 
 # First Project: How to Deal with Images
 
+**Video Tutorial:** [Watch on YouTube](https://www.youtube.com/watch?v=3c-iBn73dDE&t=5267s)
+
 Use the pages in this section for the first project and implementation walkthrough.
 
 1. [3.1 Node.js MongoDB Connection Test Project]({{ '/simple-js-app/' | relative_url }})
