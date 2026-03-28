@@ -1,10 +1,10 @@
 ---
 layout: page
-title: 3. First Project: How to Deal with Images
+title: 3.2 How to Deal with Images
 description: Run a local Node.js app with MongoDB and Mongo Express using Docker images and networking.
 permalink: /first-project/
-has_children: true
-nav_order: 3
+parent: 3. First Project: How to Deal with Images
+nav_order: 2
 ---
 
 # First Project: How to Deal with Images

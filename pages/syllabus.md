@@ -76,9 +76,9 @@ No specific prerequisite is listed in the official syllabus.
 
 1. [Slides]({{ '/slides-page/' | relative_url }})
 2. [Schedule]({{ '/schedule/' | relative_url }})
-3. [Projects]({{ '/projects/' | relative_url }})
-    1. [3.1 First Project: How to Deal with Images]({{ '/first-project/' | relative_url }})
-    2. [3.2 Simple JavaScript MongoDB App]({{ '/simple-js-app/' | relative_url }})
+3. [First Project: How to Deal with Images]({{ '/projects/' | relative_url }})
+  1. [3.1 Node.js MongoDB Connection Test Project]({{ '/simple-js-app/' | relative_url }})
+  2. [3.2 How to Deal with Images]({{ '/first-project/' | relative_url }})
 
 ## Tools
 

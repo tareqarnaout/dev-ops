@@ -1,15 +1,15 @@
 ---
 layout: page
-title: 3.2 How to Deal with Images
-description: Project pages and practical guides.
+title: 3. First Project: How to Deal with Images
+description: First project overview and related implementation pages.
 permalink: /projects/
-parent: 3. First Project: How to Deal with Images
-nav_order: 2
+has_children: true
+nav_order: 3
 ---
 
-# Projects
+# First Project: How to Deal with Images
 
-Use the pages in this section for the course projects and hands-on implementation guides.
+Use the pages in this section for the first project and implementation walkthrough.
 
-1. [3.1 First Project: How to Deal with Images]({{ '/first-project/' | relative_url }})
-2. [3.2 Simple JavaScript MongoDB App]({{ '/simple-js-app/' | relative_url }})
+1. [3.1 Node.js MongoDB Connection Test Project]({{ '/simple-js-app/' | relative_url }})
+2. [3.2 How to Deal with Images]({{ '/first-project/' | relative_url }})
