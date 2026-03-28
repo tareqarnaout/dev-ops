@@ -1,7 +1,9 @@
 ---
-layout: home
+layout: page
 title: 1. Course Info
 permalink: /syllabus/
+nav_order: 1
+has_toc: false
 seo:
   type: Course
   name: DevOps
@@ -11,14 +13,6 @@ seo:
 {:.no_toc}
 <span style="font-size: 0.8em; font-weight: normal; color: gray;">Princess Sumaya University for Technology - Spring 2025</span>
 {:.no_toc}
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
-
----
 
 ## Course Overview
 

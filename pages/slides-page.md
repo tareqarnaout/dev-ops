@@ -3,6 +3,7 @@ layout: page
 title: 2. Slides
 description: Access all course slide decks.
 permalink: /slides-page/
+nav_order: 2
 ---
 
 # Course Slides
