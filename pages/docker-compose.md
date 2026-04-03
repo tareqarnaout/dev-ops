@@ -1,9 +1,9 @@
 ---
 layout: page
-title: "3.3 Docker Compose"
+title: "3.1.3 Docker Compose"
 description: Automating Multi-Container Setups with Docker Compose.
 permalink: /docker-compose/
-parent: "3. Projects"
+parent: "3.1 First Project: How to Deal with Images"
 nav_order: 3
 ---
 
