@@ -1,19 +1,217 @@
 ---
 layout: page
-title: "3. First Project: How to Deal with Images"
-description: First project overview and related implementation pages.
+title: "3. Projects"
+description: Full project guides for 3.1 and 3.2.
 permalink: /projects/
-has_children: true
 nav_order: 3
 ---
 
-# First Project: How to Deal with Images
+# Projects
 
-**Video Tutorial:** [Watch on YouTube](https://www.youtube.com/watch?v=3c-iBn73dDE&t=5267s)
+## 3.1 First Project: How to Deal with Images
 
-Use the pages in this section for the first project and implementation walkthrough.
+This guide follows the workflow from the tutorial segment (1:10:00 to 1:29:00). It shows how to run a local JavaScript/Node.js app and connect it to MongoDB and Mongo Express containers on a shared Docker network.
 
-1. [3.1 Node.js MongoDB Connection Test Project]({{ '/simple-js-app/' | relative_url }})
-2. [3.2 How to Deal with Images]({{ '/first-project/' | relative_url }})
-3. [3.3 Docker Compose]({{ '/docker-compose/' | relative_url }})
-4. [3.4 The Resilient Blog (WordPress + MySQL)]({{ '/second-project/' | relative_url }})
+### Phase 1: Pull Required Images
+
+Pull the official images from Docker Hub:
+
+```bash
+docker pull mongo
+docker pull mongo-express
+```
+
+### Phase 2: Create a Docker Network
+
+Create a network so containers can communicate using container names.
+
+```bash
+docker network create mongo-network
+```
+
+Optional verification:
+
+```bash
+docker network ls
+```
+
+### Phase 3: Start MongoDB Container
+
+Run MongoDB, attach it to the network, and configure root credentials.
+
+```bash
+docker run -d \
+	-p 27017:27017 \
+	-e MONGO_INITDB_ROOT_USERNAME=admin \
+	-e MONGO_INITDB_ROOT_PASSWORD=password \
+	--name mongodb \
+	--net mongo-network \
+	mongo
+```
+
+Meaning of main flags:
+
+- `-d`: Run in background (detached mode).
+- `-p 27017:27017`: Expose MongoDB on local port 27017.
+- `-e`: Set environment variables for credentials.
+- `--name mongodb`: Assign a container name.
+- `--net mongo-network`: Connect the container to the custom network.
+
+### Phase 4: Start Mongo Express Container
+
+Run Mongo Express and connect it to MongoDB by container name.
+
+```bash
+docker run -d \
+	-p 8081:8081 \
+	-e ME_CONFIG_MONGODB_ADMINUSERNAME=admin \
+	-e ME_CONFIG_MONGODB_ADMINPASSWORD=password \
+	-e ME_CONFIG_MONGODB_SERVER=mongodb \
+	--name mongo-express \
+	--net mongo-network \
+	mongo-express
+```
+
+Important part:
+
+- `ME_CONFIG_MONGODB_SERVER=mongodb` uses the MongoDB container name on the same network.
+
+### Phase 5: Configure Database in UI
+
+1. Open `http://localhost:8081`.
+2. Create database: `user-account`.
+3. Create collection inside it: `users`.
+
+### Phase 6: Connect Local Node.js App
+
+Because your Node.js app runs on your host machine (outside Docker network), use `localhost`.
+
+```javascript
+const url = "mongodb://admin:password@localhost:27017";
+const dbName = "user-account";
+const collectionName = "users";
+```
+
+After this configuration, start your Node.js app and it will connect to MongoDB running in Docker.
+
+### Quick Check Commands
+
+```bash
+docker ps
+docker logs mongodb
+docker logs mongo-express
+```
+
+---
+
+## 3.2 The Resilient Blog (WordPress + MySQL)
+
+### The Objective
+
+To master Docker Volumes and container networking. By default, everything created inside a container is temporary; its writable layer is ephemeral. If a container crashes or is deleted, the internal filesystem is wiped clean, and data is lost forever. To run stateful applications like a database, data must be anchored safely outside the container's lifecycle.
+
+In this project, you will deploy a WordPress blog connected to a MySQL database and test your volume configuration by "destroying" the database container without losing your blog posts.
+
+---
+
+### Step-by-Step Implementation
+
+#### Step 1: Create an Isolated Network
+
+Containers are completely isolated by default. For WordPress to securely communicate with MySQL behind the scenes, we need to create a dedicated Docker bridge network.
+
+		docker network create blog-network
+
+#### Step 2: Create a Docker Volume
+
+Instead of a Bind Mount (which relies on your host machine's directory structure), we will use a Docker Volume. Volumes are fully managed by the Docker CLI/API and are the best practice for databases.
+
+		docker volume create db-data
+
+#### Step 3: Boot the MySQL Database
+
+We will use the `docker container run` command to boot a new instance of the official MySQL image. We'll use modifier flags to attach our network, mount our volume, and inject necessary configuration settings.
+
+		docker container run -d \
+			--name mysql-db \
+			--network blog-network \
+			-v db-data:/var/lib/mysql \
+			-e MYSQL_ROOT_PASSWORD=secret \
+			-e MYSQL_DATABASE=wordpress \
+			mysql:latest
+
+What is happening here?
+
+- `-d`: Runs the container in "detached mode" in the background.
+- `--name`: Assigns a human-readable name (`mysql-db`) instead of a random hash.
+- `--network`: Connects this container to the `blog-network` we created.
+- `-v db-data:/var/lib/mysql`: The persistence mapping. This maps our persistent Docker Volume (`db-data`) to the exact path where MySQL stores its data inside the container (`/var/lib/mysql`).
+- `-e`: Injects environment variables into the live container to configure the database credentials.
+
+#### Step 4: Boot the WordPress App
+
+Next, we spin up the WordPress container. It needs to be on the same network, and we must configure port mapping to expose the internal traffic to your host machine.
+
+		docker container run -d \
+			--name my-wp \
+			--network blog-network \
+			-p 8080:80 \
+			-e WORDPRESS_DB_HOST=mysql-db \
+			-e WORDPRESS_DB_USER=root \
+			-e WORDPRESS_DB_PASSWORD=secret \
+			-e WORDPRESS_DB_NAME=wordpress \
+			wordpress:latest
+
+What is happening here?
+
+- `-p 8080:80`: Port mapping. This bridges the internal network boundary, mapping your host's port `8080` to the container's internal port `80`.
+- `WORDPRESS_DB_HOST=mysql-db`: We use the database container name as the host address. Docker's internal DNS automatically resolves container names on the same network.
+
+---
+
+### The Midterm Test
+
+#### 1. Generate the Data
+
+1. Open your web browser and navigate to `http://localhost:8080`.
+2. Follow the quick 1-minute WordPress setup.
+3. Create a new blog post titled "Hello, DevOps!" and publish it.
+
+#### 2. Simulate a Disaster
+
+You are now going to intentionally destroy your active database container. You cannot remove a running container unless you use the `-f` (force) flag. Always stop it first, or force it.
+
+		docker container rm -f mysql-db
+
+If you refresh your WordPress site now, you will see an "Error establishing a database connection." Your database is gone.
+
+#### 3. The Recovery
+
+Because we mapped our database container to a Docker Volume (`db-data`), our data is safely anchored outside the deleted container's lifecycle. Re-run the exact same MySQL command from Step 3 to boot a fresh container attached to the same volume:
+
+		docker container run -d \
+			--name mysql-db \
+			--network blog-network \
+			-v db-data:/var/lib/mysql \
+			-e MYSQL_ROOT_PASSWORD=secret \
+			-e MYSQL_DATABASE=wordpress \
+			mysql:latest
+
+#### 4. Verify the Persistence
+
+Refresh your browser at `http://localhost:8080`. Your WordPress site will be back online, and your "Hello, DevOps!" post will still be there.
+
+---
+
+### Cleanup Procedures
+
+To keep your host system clean, remove the resources when you are finished.
+
+		# Force-remove both containers
+		docker container rm -f my-wp mysql-db
+
+		# Remove the isolated network
+		docker network rm blog-network
+
+		# Remove the persistent volume (this wipes your data permanently)
+		docker volume rm db-data

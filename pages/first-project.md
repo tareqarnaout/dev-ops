@@ -3,7 +3,7 @@ layout: page
 title: "3.2 How to Deal with Images"
 description: Run a local Node.js app with MongoDB and Mongo Express using Docker images and networking.
 permalink: /first-project/
-parent: "3. First Project: How to Deal with Images"
+parent: "3. Projects"
 nav_order: 2
 ---
 
