@@ -10,7 +10,7 @@ nav_order: 3
 
 Docker networking allows containers to communicate with each other, the host, and the outside world.
 
-![Docker network drivers overview](/assets/images/docker_network_diagram.svg)
+![Docker network drivers overview]({{ '/assets/images/docker_network_diagram.svg' | relative_url }})
 
 ---
 
