@@ -1,9 +1,9 @@
 ---
 layout: page
-title: "3.1 First Project: How to Deal with Images"
+title: "4.1 First Project: How to Deal with Images"
 description: Parent page for the first project and its sub-guides.
 permalink: /first-project-index/
-parent: "3. Projects"
+parent: "4. Projects"
 has_children: true
 nav_order: 1
 ---

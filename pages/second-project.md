@@ -1,9 +1,9 @@
 ---
 layout: page
-title: "3.2 The Resilient Blog (WordPress + MySQL)"
+title: "4.2 The Resilient Blog (WordPress + MySQL)"
 description: Deploy WordPress with MySQL using Docker volumes for persistence and test recovery.
 permalink: /second-project/
-parent: "3. Projects"
+parent: "4. Projects"
 nav_order: 2
 ---
 

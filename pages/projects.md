@@ -1,10 +1,10 @@
 ---
 layout: page
-title: "3. Projects"
+title: "4. Projects"
 description: Project index and implementation pages.
 permalink: /projects/
 has_children: true
-nav_order: 3
+nav_order: 4
 ---
 
 # Projects
