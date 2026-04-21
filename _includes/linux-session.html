@@ -1,0 +1,893 @@
+<div class="linux-session-widget">
+    <style>
+        .linux-session-widget {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --accent: #1D9E75;
+            --accent-bg: #E1F5EE;
+            --accent-text: #085041;
+            --amber: #BA7517;
+            --amber-bg: #FAEEDA;
+            --blue: #185FA5;
+            --blue-bg: #E6F1FB;
+            --coral: #993C1D;
+            --coral-bg: #FAECE7;
+            --border: rgba(0, 0, 0, 0.12);
+            --border-hover: rgba(0, 0, 0, 0.25);
+            --bg: #fff;
+            --bg2: #f6f6f4;
+            --text: #1a1a18;
+            --text2: #5f5e5a;
+            max-width: 860px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .lsw-nav {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .lsw-nav button {
+            font-size: 12px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text2);
+            cursor: pointer;
+            transition: all .15s;
+            font-family: inherit;
+        }
+
+        .lsw-nav button.lsw-active,
+        .lsw-nav button:hover {
+            background: var(--bg2);
+            color: var(--text);
+            border-color: var(--border-hover);
+        }
+
+        .lsw-nav button.lsw-active {
+            font-weight: 500;
+        }
+
+        .lsw-section {
+            display: none;
+        }
+
+        .lsw-section.lsw-visible {
+            display: block;
+        }
+
+        .lsw-section h2 {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 0 0 4px;
+            color: var(--text);
+        }
+
+        .lsw-sub {
+            font-size: 13px;
+            color: var(--text2);
+            margin-bottom: 1.5rem;
+        }
+
+        .lsw-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .lsw-badge-devops {
+            background: var(--accent-bg);
+            color: var(--accent-text);
+        }
+
+        /* Filesystem */
+        .lsw-fs-tree {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.9;
+        }
+
+        .lsw-fs-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background .12s;
+            border: 1px solid transparent;
+        }
+
+        .lsw-fs-row:hover {
+            background: var(--bg2);
+        }
+
+        .lsw-fs-row.lsw-selected {
+            background: var(--bg2);
+            border-color: var(--border);
+        }
+
+        .lsw-fs-icon {
+            font-size: 14px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .lsw-fs-name {
+            font-weight: 600;
+            color: var(--text);
+            min-width: 110px;
+        }
+
+        .lsw-fs-desc {
+            font-family: inherit;
+            font-size: 12px;
+            color: var(--text2);
+            flex: 1;
+        }
+
+        .lsw-fs-detail {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg2);
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.7;
+            display: none;
+        }
+
+        .lsw-fs-detail.lsw-visible {
+            display: block;
+        }
+
+        .lsw-fs-detail strong {
+            color: var(--text);
+        }
+
+        .lsw-fs-detail code {
+            background: rgba(0, 0, 0, 0.07);
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 12px;
+        }
+
+        /* Commands */
+        .lsw-cmd-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 10px;
+        }
+
+        .lsw-cmd-card {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 14px;
+            background: var(--bg);
+            cursor: pointer;
+            transition: border-color .15s, background .15s;
+        }
+
+        .lsw-cmd-card:hover {
+            border-color: var(--border-hover);
+            background: var(--bg2);
+        }
+
+        .lsw-cmd-code {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .lsw-cmd-desc {
+            font-size: 12px;
+            color: var(--text2);
+        }
+
+        .lsw-cmd-example {
+            margin-top: 8px;
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 11px;
+            background: var(--bg2);
+            padding: 6px 8px;
+            border-radius: 4px;
+            color: var(--text2);
+            display: none;
+            white-space: pre;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+        }
+
+        .lsw-cmd-card.lsw-open .lsw-cmd-example {
+            display: block;
+        }
+
+        /* Permissions */
+        .lsw-perm-row {
+            display: flex;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 13px;
+        }
+
+        .lsw-perm-seg {
+            flex: 1;
+            padding: 8px 4px;
+            text-align: center;
+            background: var(--bg2);
+            border-right: 1px solid var(--border);
+        }
+
+        .lsw-perm-seg:last-child {
+            border-right: none;
+        }
+
+        .lsw-perm-label {
+            flex: none;
+            width: 64px;
+            padding: 8px 4px;
+            text-align: center;
+            background: var(--bg2);
+            font-family: inherit;
+            font-size: 11px;
+            color: var(--text2);
+            border-right: 1px solid var(--border);
+        }
+
+        .lsw-seg-r {
+            background: var(--blue-bg);
+            color: var(--blue);
+        }
+
+        .lsw-seg-w {
+            background: var(--amber-bg);
+            color: var(--amber);
+        }
+
+        .lsw-seg-x {
+            background: var(--accent-bg);
+            color: var(--accent-text);
+        }
+
+        .lsw-seg-off {
+            background: var(--bg2);
+            color: var(--text2);
+            opacity: .5;
+        }
+
+        .lsw-perm-presets {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .lsw-perm-block {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            min-width: 110px;
+            text-align: center;
+            background: var(--bg);
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .lsw-perm-block:hover {
+            border-color: var(--accent);
+            background: var(--accent-bg);
+        }
+
+        .lsw-perm-num {
+            font-size: 26px;
+            font-weight: 500;
+            color: var(--text);
+            font-family: "SFMono-Regular", Consolas, monospace;
+        }
+
+        .lsw-perm-lbl {
+            font-size: 11px;
+            color: var(--text2);
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        /* Streams */
+        .lsw-stream-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .lsw-stream-box {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-weight: 600;
+            font-size: 12px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .lsw-op-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 1rem;
+        }
+
+        .lsw-op-table th {
+            text-align: left;
+            padding: 8px 12px;
+            font-weight: 500;
+            font-size: 12px;
+            color: var(--text2);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .lsw-op-table td {
+            padding: 9px 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+            color: var(--text2);
+        }
+
+        .lsw-op-table td:first-child {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+        }
+
+        .lsw-op-table td:last-child {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 12px;
+        }
+
+        /* Services */
+        .lsw-svc-state {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .lsw-svc-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .lsw-dot-green {
+            background: #1D9E75;
+        }
+
+        .lsw-dot-red {
+            background: #E24B4A;
+        }
+
+        .lsw-dot-gray {
+            background: #888;
+        }
+
+        .lsw-svc-cmd {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            flex: 1;
+        }
+
+        .lsw-svc-lbl {
+            font-size: 11px;
+            color: var(--text2);
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        /* Processes */
+        .lsw-proc-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            font-family: "SFMono-Regular", Consolas, monospace;
+        }
+
+        .lsw-proc-table th {
+            text-align: left;
+            padding: 6px 10px;
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            font-size: 11px;
+            color: var(--text2);
+            font-family: inherit;
+        }
+
+        .lsw-proc-table td {
+            padding: 6px 10px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .lsw-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: var(--accent);
+            display: inline-block;
+        }
+
+        .lsw-bar-blue {
+            background: var(--blue);
+        }
+
+        /* Tip box */
+        .lsw-tip {
+            margin-top: 1.2rem;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+            background: var(--accent-bg);
+            font-size: 12px;
+            color: var(--accent-text);
+            line-height: 1.7;
+        }
+
+        .lsw-tip code {
+            background: rgba(8, 80, 65, 0.12);
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 11px;
+        }
+
+        .lsw-tip strong {
+            color: var(--accent-text);
+        }
+
+        .lsw-box {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 1rem;
+            background: var(--bg);
+        }
+
+        .lsw-box-title {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .lsw-mono {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 12px;
+            line-height: 2;
+            color: var(--text2);
+        }
+
+        .lsw-code-pill {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 2px 0;
+        }
+
+        .lsw-pill-green {
+            background: var(--accent-bg);
+            color: var(--accent-text);
+        }
+
+        .lsw-pill-red {
+            background: var(--coral-bg);
+            color: var(--coral);
+        }
+    </style>
+
+    <div class="lsw-nav">
+        <button class="lsw-active" onclick="lswShow('lsw-fs', this)">Filesystem</button>
+        <button onclick="lswShow('lsw-nav', this)">Navigation</button>
+        <button onclick="lswShow('lsw-perms', this)">Permissions</button>
+        <button onclick="lswShow('lsw-streams', this)">Streams &amp; Pipes</button>
+        <button onclick="lswShow('lsw-proc', this)">Processes</button>
+        <button onclick="lswShow('lsw-services', this)">Services</button>
+    </div>
+
+    <!-- FILESYSTEM -->
+    <div id="lsw-fs" class="lsw-section lsw-visible">
+        <h2>Linux filesystem hierarchy</h2>
+        <p class="lsw-sub">Click any directory to learn more. <span class="lsw-badge lsw-badge-devops">DevOps</span> =
+            critical for DevOps work.</p>
+        <div class="lsw-fs-tree" id="lsw-fstree"></div>
+        <div class="lsw-fs-detail" id="lsw-fsdetail"></div>
+        <div class="lsw-tip">In DevOps, you'll spend most time in <strong>/etc</strong> (configs),
+            <strong>/var/log</strong> (debugging), <strong>/usr/local</strong> (installed tools), and
+            <strong>/opt</strong> (Docker, databases).</div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div id="lsw-nav" class="lsw-section">
+        <h2>Navigation &amp; file operations</h2>
+        <p class="lsw-sub">Click any command card to see a real example.</p>
+        <div class="lsw-cmd-grid" id="lsw-cmdgrid"></div>
+        <div class="lsw-tip"><strong>Most common combo:</strong> <code>ls -la</code> shows everything (hidden files +
+            permissions). Pair with <code>pwd</code> to never lose your way on a server.</div>
+    </div>
+
+    <!-- PERMISSIONS -->
+    <div id="lsw-perms" class="lsw-section">
+        <h2>Ownership &amp; permissions</h2>
+        <p class="lsw-sub">Linux permissions are three groups of three bits. Drag the slider or click a preset.</p>
+        <div class="lsw-perm-row">
+            <div class="lsw-perm-label">owner</div>
+            <div class="lsw-perm-seg lsw-seg-r" id="lsw-sr">r</div>
+            <div class="lsw-perm-seg lsw-seg-w" id="lsw-sw">w</div>
+            <div class="lsw-perm-seg lsw-seg-x" id="lsw-sx">x</div>
+            <div class="lsw-perm-label">group</div>
+            <div class="lsw-perm-seg lsw-seg-r" id="lsw-gr">r</div>
+            <div class="lsw-perm-seg lsw-seg-w" id="lsw-gw">w</div>
+            <div class="lsw-perm-seg lsw-seg-off" id="lsw-gx">-</div>
+            <div class="lsw-perm-label">others</div>
+            <div class="lsw-perm-seg lsw-seg-r" id="lsw-or">r</div>
+            <div class="lsw-perm-seg lsw-seg-off" id="lsw-ow">-</div>
+            <div class="lsw-perm-seg lsw-seg-off" id="lsw-ox">-</div>
+        </div>
+        <div style="text-align:center;font-family:'SFMono-Regular',Consolas,monospace;font-size:22px;font-weight:600;margin:8px 0 4px"
+            id="lsw-permnum">754</div>
+        <div style="text-align:center;font-size:12px;color:var(--text2);margin-bottom:1rem" id="lsw-permdesc"></div>
+        <div style="margin-bottom:1rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;">
+            <label style="color:var(--text2)">chmod value:</label>
+            <input type="range" min="0" max="777" value="754" id="lsw-permslider" oninput="lswUpdatePerm(this.value)"
+                style="flex:1;min-width:120px;max-width:240px">
+            <span style="font-family:'SFMono-Regular',Consolas,monospace;font-size:13px" id="lsw-permval">754</span>
+        </div>
+        <div class="lsw-perm-presets">
+            <div class="lsw-perm-block" onclick="lswSetPerm(755)">
+                <div class="lsw-perm-num">755</div>
+                <div class="lsw-perm-lbl">rwxr-xr-x<br>executables</div>
+            </div>
+            <div class="lsw-perm-block" onclick="lswSetPerm(644)">
+                <div class="lsw-perm-num">644</div>
+                <div class="lsw-perm-lbl">rw-r--r--<br>config files</div>
+            </div>
+            <div class="lsw-perm-block" onclick="lswSetPerm(600)">
+                <div class="lsw-perm-num">600</div>
+                <div class="lsw-perm-lbl">rw-------<br>private keys</div>
+            </div>
+            <div class="lsw-perm-block" onclick="lswSetPerm(777)">
+                <div class="lsw-perm-num">777</div>
+                <div class="lsw-perm-lbl">rwxrwxrwx<br>insecure</div>
+            </div>
+        </div>
+        <div class="lsw-tip"><strong>chown</strong> changes who owns a file:
+            <code>chown ubuntu:www-data /var/www/app</code><br><strong>chmod</strong> changes what they can do:
+            <code>chmod 644 /etc/nginx/nginx.conf</code></div>
+    </div>
+
+    <!-- STREAMS -->
+    <div id="lsw-streams" class="lsw-section">
+        <h2>Data streams, pipes &amp; redirection</h2>
+        <p class="lsw-sub">Every Linux command has three channels for data.</p>
+        <div class="lsw-stream-row">
+            <div class="lsw-stream-box" style="background:var(--blue-bg);color:var(--blue)">STDIN (0)</div><span
+                style="color:var(--text2)"><-< /span><span style="font-size:13px;color:var(--text2)">keyboard, file, or
+                        another command's output</span>
+        </div>
+        <div class="lsw-stream-row">
+            <div class="lsw-stream-box" style="background:var(--accent-bg);color:var(--accent-text)">STDOUT (1)</div>
+            <span style="color:var(--text2)">-></span><span style="font-size:13px;color:var(--text2)">terminal screen by
+                default</span>
+        </div>
+        <div class="lsw-stream-row">
+            <div class="lsw-stream-box" style="background:var(--coral-bg);color:var(--coral)">STDERR (2)</div><span
+                style="color:var(--text2)">-></span><span style="font-size:13px;color:var(--text2)">error messages, also
+                screen by default</span>
+        </div>
+        <table class="lsw-op-table">
+            <tr>
+                <th>Operator</th>
+                <th>Name</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td>&gt;</td>
+                <td>Redirect - overwrite</td>
+                <td>ls &gt; files.txt</td>
+            </tr>
+            <tr>
+                <td>&gt;&gt;</td>
+                <td>Redirect - append</td>
+                <td>echo "done" &gt;&gt; log.txt</td>
+            </tr>
+            <tr>
+                <td>|</td>
+                <td>Pipe to next command</td>
+                <td>ps aux | grep nginx</td>
+            </tr>
+            <tr>
+                <td>2&gt;</td>
+                <td>Redirect errors only</td>
+                <td>cmd 2&gt; err.log</td>
+            </tr>
+            <tr>
+                <td>2&gt;&amp;1</td>
+                <td>Merge errors into stdout</td>
+                <td>cmd &gt; all.log 2&gt;&amp;1</td>
+            </tr>
+            <tr>
+                <td>&lt;</td>
+                <td>Read stdin from file</td>
+                <td>mysql db &lt; dump.sql</td>
+            </tr>
+        </table>
+        <div class="lsw-tip"><strong>Most used in DevOps:</strong>
+            <code>journalctl -u nginx | grep ERROR | tail -50</code><br><code>2&gt;&amp;1</code> is essential when
+            capturing all output in CI/CD pipelines.</div>
+    </div>
+
+    <!-- PROCESSES -->
+    <div id="lsw-proc" class="lsw-section">
+        <h2>Process management</h2>
+        <p class="lsw-sub">A snapshot of what's running - like Task Manager, but useful.</p>
+        <table class="lsw-proc-table">
+            <tr>
+                <th>PID</th>
+                <th>USER</th>
+                <th>%CPU</th>
+                <th></th>
+                <th>%MEM</th>
+                <th></th>
+                <th>COMMAND</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>root</td>
+                <td>0.1</td>
+                <td>
+                    <div class="lsw-bar" style="width:3px"></div>
+                </td>
+                <td>0.5</td>
+                <td>
+                    <div class="lsw-bar lsw-bar-blue" style="width:5px"></div>
+                </td>
+                <td>systemd</td>
+            </tr>
+            <tr>
+                <td>812</td>
+                <td>nginx</td>
+                <td>2.4</td>
+                <td>
+                    <div class="lsw-bar" style="width:24px"></div>
+                </td>
+                <td>1.2</td>
+                <td>
+                    <div class="lsw-bar lsw-bar-blue" style="width:12px"></div>
+                </td>
+                <td>nginx: master</td>
+            </tr>
+            <tr>
+                <td>1240</td>
+                <td>postgres</td>
+                <td>8.1</td>
+                <td>
+                    <div class="lsw-bar" style="width:81px"></div>
+                </td>
+                <td>4.3</td>
+                <td>
+                    <div class="lsw-bar lsw-bar-blue" style="width:43px"></div>
+                </td>
+                <td>postgres: main</td>
+            </tr>
+            <tr>
+                <td>3310</td>
+                <td>node</td>
+                <td>14.2</td>
+                <td>
+                    <div class="lsw-bar" style="width:140px"></div>
+                </td>
+                <td>7.8</td>
+                <td>
+                    <div class="lsw-bar lsw-bar-blue" style="width:78px"></div>
+                </td>
+                <td>node app.js</td>
+            </tr>
+            <tr>
+                <td>4401</td>
+                <td>ubuntu</td>
+                <td>0.3</td>
+                <td>
+                    <div class="lsw-bar" style="width:3px"></div>
+                </td>
+                <td>0.9</td>
+                <td>
+                    <div class="lsw-bar lsw-bar-blue" style="width:9px"></div>
+                </td>
+                <td>bash</td>
+            </tr>
+        </table>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:1rem">
+            <div class="lsw-box">
+                <div class="lsw-box-title">View processes</div>
+                <div class="lsw-mono">ps aux<br>htop &nbsp;<span style="font-size:11px;opacity:.7">(interactive)</span>
+                </div>
+            </div>
+            <div class="lsw-box">
+                <div class="lsw-box-title">Kill a process</div>
+                <div class="lsw-mono">kill &lt;PID&gt;<br>kill -9 &lt;PID&gt; &nbsp;<span
+                        style="font-size:11px;opacity:.7">(force)</span></div>
+            </div>
+        </div>
+        <div class="lsw-tip"><strong>grep is your best friend:</strong> <code>ps aux | grep docker</code> instantly
+            finds all Docker processes. Use <code>htop</code> on a server to diagnose CPU spikes - press
+            <strong>F6</strong> to sort by CPU.</div>
+    </div>
+
+    <!-- SERVICES -->
+    <div id="lsw-services" class="lsw-section">
+        <h2>Services with systemctl</h2>
+        <p class="lsw-sub">systemd manages all background services on modern Linux. These are the commands you'll use
+            daily.</p>
+        <div class="lsw-svc-state">
+            <div class="lsw-svc-dot lsw-dot-green"></div>
+            <div class="lsw-svc-cmd">sudo systemctl start nginx</div><span class="lsw-svc-lbl">start immediately</span>
+        </div>
+        <div class="lsw-svc-state">
+            <div class="lsw-svc-dot lsw-dot-red"></div>
+            <div class="lsw-svc-cmd">sudo systemctl stop nginx</div><span class="lsw-svc-lbl">stop running
+                service</span>
+        </div>
+        <div class="lsw-svc-state">
+            <div class="lsw-svc-dot lsw-dot-green"></div>
+            <div class="lsw-svc-cmd">sudo systemctl restart nginx</div><span class="lsw-svc-lbl">stop + start</span>
+        </div>
+        <div class="lsw-svc-state">
+            <div class="lsw-svc-dot lsw-dot-green"></div>
+            <div class="lsw-svc-cmd">sudo systemctl reload nginx</div><span class="lsw-svc-lbl">reload config - no
+                downtime</span>
+        </div>
+        <div class="lsw-svc-state">
+            <div class="lsw-svc-dot lsw-dot-gray"></div>
+            <div class="lsw-svc-cmd">systemctl status nginx</div><span class="lsw-svc-lbl">check state + recent
+                logs</span>
+        </div>
+        <div class="lsw-box" style="margin-top:1rem">
+            <div class="lsw-box-title">Boot persistence</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                <span class="lsw-code-pill lsw-pill-green">sudo systemctl enable nginx</span>
+                <span style="font-size:12px;color:var(--text2)">-> auto-start on reboot</span>
+                <span class="lsw-code-pill lsw-pill-red">sudo systemctl disable nginx</span>
+                <span style="font-size:12px;color:var(--text2)">-> don't auto-start</span>
+            </div>
+        </div>
+        <div class="lsw-box">
+            <div class="lsw-box-title">Reading logs with journalctl</div>
+            <div class="lsw-mono">
+                journalctl -u nginx<br>
+                journalctl -u nginx -f &nbsp;<span style="font-size:11px;opacity:.7">follow in real time</span><br>
+                journalctl -u nginx --since "1 hour ago"
+            </div>
+        </div>
+        <div class="lsw-tip"><strong>Deploy workflow:</strong> Edit config -> <code>sudo nginx -t</code> (test syntax)
+            -> <code>sudo systemctl reload nginx</code> (zero downtime). If reload fails,
+            <code>journalctl -u nginx -n 50</code> shows why.</div>
+    </div>
+
+</div><!-- end .linux-session-widget -->
+
+<script>
+    (function () {
+        var fsData = [
+            { name: '/', icon: 'root', desc: 'Root of everything', devops: false, detail: '<strong>The root directory.</strong> Every file on the system lives under /. All absolute paths start here, like <code>/etc/nginx/nginx.conf</code>.' },
+            { name: '/etc', icon: 'cfg', desc: 'System-wide config files', devops: true, detail: '<strong>Your most visited directory in DevOps.</strong> Config files for every service: <code>/etc/nginx/</code>, <code>/etc/ssh/sshd_config</code>, <code>/etc/hosts</code>, <code>/etc/cron.d/</code>. Always back up before editing.' },
+            { name: '/var/log', icon: 'log', desc: 'Application & system logs', devops: true, detail: '<strong>First stop when something breaks.</strong> <code>/var/log/nginx/error.log</code>, <code>/var/log/syslog</code>, <code>/var/log/auth.log</code>. Use <code>tail -f</code> to stream logs live during debugging.' },
+            { name: '/usr/local', icon: 'pkg', desc: 'Third-party installed software', devops: true, detail: '<strong>Where tools like Docker, Node, Java install to.</strong> <code>/usr/local/bin</code> holds executables, <code>/usr/local/lib</code> holds libraries. When you <code>sudo make install</code>, it lands here.' },
+            { name: '/opt', icon: 'opt', desc: 'Optional self-contained packages', devops: true, detail: '<strong>Self-contained apps go here.</strong> Unlike /usr/local (split into bin/lib), /opt keeps a whole app in one folder: <code>/opt/prometheus/</code>, <code>/opt/grafana/</code>. Common for databases and monitoring tools.' },
+            { name: '/home', icon: 'home', desc: 'User directories', devops: false, detail: 'Each user has a subdirectory: <code>/home/ubuntu</code>. SSH keys live at <code>/home/ubuntu/.ssh/authorized_keys</code>. The root user uses <code>/root</code> instead.' },
+            { name: '/bin & /sbin', icon: 'bin', desc: 'Essential system binaries', devops: false, detail: '<strong>/bin</strong> has commands all users need: <code>ls</code>, <code>cp</code>, <code>grep</code>. <strong>/sbin</strong> has admin commands: <code>fdisk</code>, <code>ifconfig</code>. On modern systems these often link to /usr/bin.' },
+            { name: '/tmp', icon: 'tmp', desc: 'Temporary files (cleared on reboot)', devops: false, detail: 'Processes write temp files here. Cleared on every reboot. Useful for quick scratch space in scripts but never store important data here.' },
+            { name: '/dev', icon: 'dev', desc: 'Device files', devops: false, detail: 'Hardware is represented as files: <code>/dev/sda</code> (disk), <code>/dev/null</code> (discard output), <code>/dev/random</code> (entropy). Useful to know but rarely touched directly.' },
+            { name: '/boot', icon: 'boot', desc: 'Boot loader & kernel files', devops: false, detail: 'Kernel images and GRUB boot loader live here. Rarely touched unless managing kernel upgrades. <strong>Do not delete anything here.</strong>' },
+            { name: '/media & /mnt', icon: 'mnt', desc: 'Mount points for storage', devops: false, detail: '<code>/media</code> is for auto-mounted removable media. <code>/mnt</code> is for manual mounts: <code>mount /dev/sdb1 /mnt/data</code>. Common in cloud when attaching extra volumes.' }
+        ];
+        var tree = document.getElementById('lsw-fstree');
+        var detail = document.getElementById('lsw-fsdetail');
+        fsData.forEach(function (d) {
+            var row = document.createElement('div');
+            row.className = 'lsw-fs-row';
+            row.innerHTML = '<span class="lsw-fs-icon">' + d.icon + '</span>' +
+                '<span class="lsw-fs-name">' + d.name + '</span>' +
+                '<span class="lsw-fs-desc">' + d.desc + '</span>' +
+                (d.devops ? '<span class="lsw-badge lsw-badge-devops">DevOps</span>' : '');
+            row.onclick = function () {
+                document.querySelectorAll('.lsw-fs-row').forEach(function (r) { r.classList.remove('lsw-selected'); });
+                row.classList.add('lsw-selected');
+                detail.innerHTML = d.detail;
+                detail.classList.add('lsw-visible');
+            };
+            tree.appendChild(row);
+        });
+
+        var cmds = [
+            { cmd: 'pwd', desc: 'Show current directory path', ex: '$ pwd\n/home/ubuntu/app' },
+            { cmd: 'ls -la', desc: 'List all files with permissions & hidden', ex: '$ ls -la\ndrwxr-xr-x  ubuntu  . \n-rw-r--r--  ubuntu  .env' },
+            { cmd: 'cd /etc/nginx', desc: 'Change to directory', ex: '$ cd /etc/nginx\n$ pwd\n/etc/nginx' },
+            { cmd: 'mkdir -p app/src', desc: 'Create nested directories', ex: '$ mkdir -p /var/app/src\n# -p creates parents too' },
+            { cmd: 'touch server.conf', desc: 'Create an empty file', ex: '$ touch /etc/app/server.conf' },
+            { cmd: 'cp -r src/ backup/', desc: 'Copy file or directory recursively', ex: '$ cp -r /etc/nginx /etc/nginx.bak' },
+            { cmd: 'mv old.conf new.conf', desc: 'Move or rename a file', ex: '$ mv nginx.conf.old nginx.conf' },
+            { cmd: 'rm -rf folder/', desc: 'Delete recursively (careful!)', ex: '$ rm -rf /tmp/build\n# No undo - be sure!' },
+            { cmd: 'cat file.txt', desc: 'Print entire file to screen', ex: '$ cat /etc/hosts\n127.0.0.1 localhost' },
+            { cmd: 'grep "ERROR" app.log', desc: 'Search for pattern in file', ex: '$ grep "ERROR" /var/log/nginx/error.log' },
+            { cmd: 'tail -f app.log', desc: 'Follow file output live', ex: '$ tail -f /var/log/nginx/access.log\n# streams new lines as they appear' },
+            { cmd: 'head -n 20 file.txt', desc: 'View first 20 lines', ex: '$ head -n 20 /etc/nginx/nginx.conf' }
+        ];
+        var grid = document.getElementById('lsw-cmdgrid');
+        cmds.forEach(function (c) {
+            var card = document.createElement('div');
+            card.className = 'lsw-cmd-card';
+            card.innerHTML = '<div class="lsw-cmd-code">' + c.cmd + '</div>' +
+                '<div class="lsw-cmd-desc">' + c.desc + '</div>' +
+                '<pre class="lsw-cmd-example">' + c.ex + '</pre>';
+            card.onclick = function () { card.classList.toggle('lsw-open'); };
+            grid.appendChild(card);
+        });
+
+        function lswUpdatePerm(v) {
+            var val = Math.min(parseInt(v) || 0, 777);
+            var s = String(val).padStart(3, '0');
+            var digits = s.split('').map(Number);
+            for (var i = 0; i < digits.length; i++) { if (digits[i] > 7) return; }
+            var groups = [['lsw-sr', 'lsw-sw', 'lsw-sx'], ['lsw-gr', 'lsw-gw', 'lsw-gx'], ['lsw-or', 'lsw-ow', 'lsw-ox']];
+            var names = ['r', 'w', 'x'];
+            var classes = ['lsw-seg-r', 'lsw-seg-w', 'lsw-seg-x'];
+            digits.forEach(function (d, i) {
+                var bits = [!!(d & 4), !!(d & 2), !!(d & 1)];
+                bits.forEach(function (on, j) {
+                    var el = document.getElementById(groups[i][j]);
+                    el.className = 'lsw-perm-seg ' + (on ? classes[j] : 'lsw-seg-off');
+                    el.textContent = on ? names[j] : '-';
+                });
+            });
+            document.getElementById('lsw-permnum').textContent = s;
+            var lbls = ['owner', 'group', 'others'].map(function (lbl, i) {
+                var d = digits[i];
+                return lbl + ': ' + (!!(d & 4) ? 'r' : '-') + (!!(d & 2) ? 'w' : '-') + (!!(d & 1) ? 'x' : '-') + ' (' + d + ')';
+            });
+            document.getElementById('lsw-permdesc').textContent = lbls.join(' | ');
+            document.getElementById('lsw-permslider').value = val;
+            document.getElementById('lsw-permval').textContent = s;
+        }
+        window.lswUpdatePerm = lswUpdatePerm;
+        window.lswSetPerm = function (v) { lswUpdatePerm(v); };
+        lswUpdatePerm(754);
+
+        window.lswShow = function (id, btn) {
+            document.querySelectorAll('.lsw-section').forEach(function (s) { s.classList.remove('lsw-visible'); });
+            document.getElementById(id).classList.add('lsw-visible');
+            document.querySelectorAll('.lsw-nav button').forEach(function (b) { b.classList.remove('lsw-active'); });
+            btn.classList.add('lsw-active');
+        };
+    })();
+</script>
