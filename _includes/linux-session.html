@@ -96,10 +96,11 @@
         }
 
         .lsw-fs-row {
-            display: flex;
+            display: grid;
+            grid-template-columns: 32px minmax(130px, 170px) 1fr auto;
             align-items: center;
-            gap: 8px;
-            padding: 4px 10px;
+            gap: 12px;
+            padding: 8px 10px;
             border-radius: 6px;
             cursor: pointer;
             transition: background .12s;
@@ -116,22 +117,64 @@
         }
 
         .lsw-fs-icon {
-            font-size: 14px;
-            width: 20px;
+            font-size: 12px;
+            width: auto;
             text-align: center;
+            white-space: nowrap;
+            color: var(--text2);
+            font-weight: 700;
         }
 
         .lsw-fs-name {
             font-weight: 600;
             color: var(--text);
-            min-width: 110px;
+            min-width: 0;
+            white-space: nowrap;
         }
 
         .lsw-fs-desc {
             font-family: inherit;
+            font-size: 13px;
+            color: var(--text2);
+            min-width: 0;
+        }
+
+        .lsw-perm-input-wrap {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            font-size: 13px;
+        }
+
+        .lsw-perm-input {
+            width: 88px;
+            padding: 6px 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 14px;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        .lsw-perm-help {
             font-size: 12px;
             color: var(--text2);
-            flex: 1;
+        }
+
+        @media (max-width: 760px) {
+            .lsw-fs-row {
+                grid-template-columns: 26px minmax(95px, 120px) 1fr;
+                gap: 8px;
+            }
+
+            .lsw-fs-row .lsw-badge {
+                grid-column: 2 / span 2;
+                justify-self: start;
+                margin-left: 0;
+            }
         }
 
         .lsw-fs-detail {
@@ -524,7 +567,8 @@
         <div class="lsw-fs-detail" id="lsw-fsdetail"></div>
         <div class="lsw-tip">In DevOps, you'll spend most time in <strong>/etc</strong> (configs),
             <strong>/var/log</strong> (debugging), <strong>/usr/local</strong> (installed tools), and
-            <strong>/opt</strong> (Docker, databases).</div>
+            <strong>/opt</strong> (Docker, databases).
+        </div>
     </div>
 
     <!-- NAVIGATION -->
@@ -539,7 +583,8 @@
     <!-- PERMISSIONS -->
     <div id="lsw-perms" class="lsw-section">
         <h2>Ownership &amp; permissions</h2>
-        <p class="lsw-sub">Linux permissions are three groups of three bits. Drag the slider or click a preset.</p>
+        <p class="lsw-sub">Linux permissions are three groups of three bits. Type a value (000-777) or click a preset.
+        </p>
         <div class="lsw-perm-row">
             <div class="lsw-perm-label">owner</div>
             <div class="lsw-perm-seg lsw-seg-r" id="lsw-sr">r</div>
@@ -557,11 +602,11 @@
         <div style="text-align:center;font-family:'SFMono-Regular',Consolas,monospace;font-size:22px;font-weight:600;margin:8px 0 4px"
             id="lsw-permnum">754</div>
         <div style="text-align:center;font-size:12px;color:var(--text2);margin-bottom:1rem" id="lsw-permdesc"></div>
-        <div style="margin-bottom:1rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;">
-            <label style="color:var(--text2)">chmod value:</label>
-            <input type="range" min="0" max="777" value="754" id="lsw-permslider" oninput="lswUpdatePerm(this.value)"
-                style="flex:1;min-width:120px;max-width:240px">
-            <span style="font-family:'SFMono-Regular',Consolas,monospace;font-size:13px" id="lsw-permval">754</span>
+        <div class="lsw-perm-input-wrap">
+            <label style="color:var(--text2)" for="lsw-perminput">chmod value:</label>
+            <input class="lsw-perm-input" id="lsw-perminput" type="text" inputmode="numeric" maxlength="3" value="754"
+                oninput="lswHandlePermInput(this.value)" onblur="lswNormalizePermInput(this)">
+            <span class="lsw-perm-help">Use digits 0-7 only, for example: 644, 755, 600.</span>
         </div>
         <div class="lsw-perm-presets">
             <div class="lsw-perm-block" onclick="lswSetPerm(755)">
@@ -583,7 +628,8 @@
         </div>
         <div class="lsw-tip"><strong>chown</strong> changes who owns a file:
             <code>chown ubuntu:www-data /var/www/app</code><br><strong>chmod</strong> changes what they can do:
-            <code>chmod 644 /etc/nginx/nginx.conf</code></div>
+            <code>chmod 644 /etc/nginx/nginx.conf</code>
+        </div>
     </div>
 
     <!-- STREAMS -->
@@ -592,8 +638,9 @@
         <p class="lsw-sub">Every Linux command has three channels for data.</p>
         <div class="lsw-stream-row">
             <div class="lsw-stream-box" style="background:var(--blue-bg);color:var(--blue)">STDIN (0)</div><span
-                style="color:var(--text2)"><-< /span><span style="font-size:13px;color:var(--text2)">keyboard, file, or
-                        another command's output</span>
+                style="color:var(--text2)">&larr;</span><span style="font-size:13px;color:var(--text2)">keyboard, file,
+                or
+                another command's output</span>
         </div>
         <div class="lsw-stream-row">
             <div class="lsw-stream-box" style="background:var(--accent-bg);color:var(--accent-text)">STDOUT (1)</div>
@@ -644,7 +691,8 @@
         </table>
         <div class="lsw-tip"><strong>Most used in DevOps:</strong>
             <code>journalctl -u nginx | grep ERROR | tail -50</code><br><code>2&gt;&amp;1</code> is essential when
-            capturing all output in CI/CD pipelines.</div>
+            capturing all output in CI/CD pipelines.
+        </div>
     </div>
 
     <!-- PROCESSES -->
@@ -741,7 +789,8 @@
         </div>
         <div class="lsw-tip"><strong>grep is your best friend:</strong> <code>ps aux | grep docker</code> instantly
             finds all Docker processes. Use <code>htop</code> on a server to diagnose CPU spikes - press
-            <strong>F6</strong> to sort by CPU.</div>
+            <strong>F6</strong> to sort by CPU.
+        </div>
     </div>
 
     <!-- SERVICES -->
@@ -791,7 +840,8 @@
         </div>
         <div class="lsw-tip"><strong>Deploy workflow:</strong> Edit config -> <code>sudo nginx -t</code> (test syntax)
             -> <code>sudo systemctl reload nginx</code> (zero downtime). If reload fails,
-            <code>journalctl -u nginx -n 50</code> shows why.</div>
+            <code>journalctl -u nginx -n 50</code> shows why.
+        </div>
     </div>
 
 </div><!-- end .linux-session-widget -->
@@ -799,17 +849,17 @@
 <script>
     (function () {
         var fsData = [
-            { name: '/', icon: 'root', desc: 'Root of everything', devops: false, detail: '<strong>The root directory.</strong> Every file on the system lives under /. All absolute paths start here, like <code>/etc/nginx/nginx.conf</code>.' },
-            { name: '/etc', icon: 'cfg', desc: 'System-wide config files', devops: true, detail: '<strong>Your most visited directory in DevOps.</strong> Config files for every service: <code>/etc/nginx/</code>, <code>/etc/ssh/sshd_config</code>, <code>/etc/hosts</code>, <code>/etc/cron.d/</code>. Always back up before editing.' },
-            { name: '/var/log', icon: 'log', desc: 'Application & system logs', devops: true, detail: '<strong>First stop when something breaks.</strong> <code>/var/log/nginx/error.log</code>, <code>/var/log/syslog</code>, <code>/var/log/auth.log</code>. Use <code>tail -f</code> to stream logs live during debugging.' },
-            { name: '/usr/local', icon: 'pkg', desc: 'Third-party installed software', devops: true, detail: '<strong>Where tools like Docker, Node, Java install to.</strong> <code>/usr/local/bin</code> holds executables, <code>/usr/local/lib</code> holds libraries. When you <code>sudo make install</code>, it lands here.' },
-            { name: '/opt', icon: 'opt', desc: 'Optional self-contained packages', devops: true, detail: '<strong>Self-contained apps go here.</strong> Unlike /usr/local (split into bin/lib), /opt keeps a whole app in one folder: <code>/opt/prometheus/</code>, <code>/opt/grafana/</code>. Common for databases and monitoring tools.' },
-            { name: '/home', icon: 'home', desc: 'User directories', devops: false, detail: 'Each user has a subdirectory: <code>/home/ubuntu</code>. SSH keys live at <code>/home/ubuntu/.ssh/authorized_keys</code>. The root user uses <code>/root</code> instead.' },
-            { name: '/bin & /sbin', icon: 'bin', desc: 'Essential system binaries', devops: false, detail: '<strong>/bin</strong> has commands all users need: <code>ls</code>, <code>cp</code>, <code>grep</code>. <strong>/sbin</strong> has admin commands: <code>fdisk</code>, <code>ifconfig</code>. On modern systems these often link to /usr/bin.' },
-            { name: '/tmp', icon: 'tmp', desc: 'Temporary files (cleared on reboot)', devops: false, detail: 'Processes write temp files here. Cleared on every reboot. Useful for quick scratch space in scripts but never store important data here.' },
-            { name: '/dev', icon: 'dev', desc: 'Device files', devops: false, detail: 'Hardware is represented as files: <code>/dev/sda</code> (disk), <code>/dev/null</code> (discard output), <code>/dev/random</code> (entropy). Useful to know but rarely touched directly.' },
-            { name: '/boot', icon: 'boot', desc: 'Boot loader & kernel files', devops: false, detail: 'Kernel images and GRUB boot loader live here. Rarely touched unless managing kernel upgrades. <strong>Do not delete anything here.</strong>' },
-            { name: '/media & /mnt', icon: 'mnt', desc: 'Mount points for storage', devops: false, detail: '<code>/media</code> is for auto-mounted removable media. <code>/mnt</code> is for manual mounts: <code>mount /dev/sdb1 /mnt/data</code>. Common in cloud when attaching extra volumes.' }
+            { name: '/', icon: 'R', desc: 'Root of everything', devops: false, detail: '<strong>The root directory.</strong> Every file on the system lives under /. All absolute paths start here, like <code>/etc/nginx/nginx.conf</code>.' },
+            { name: '/etc', icon: 'C', desc: 'System-wide config files', devops: true, detail: '<strong>Your most visited directory in DevOps.</strong> Config files for every service: <code>/etc/nginx/</code>, <code>/etc/ssh/sshd_config</code>, <code>/etc/hosts</code>, <code>/etc/cron.d/</code>. Always back up before editing.' },
+            { name: '/var/log', icon: 'L', desc: 'Application & system logs', devops: true, detail: '<strong>First stop when something breaks.</strong> <code>/var/log/nginx/error.log</code>, <code>/var/log/syslog</code>, <code>/var/log/auth.log</code>. Use <code>tail -f</code> to stream logs live during debugging.' },
+            { name: '/usr/local', icon: 'U', desc: 'Third-party installed software', devops: true, detail: '<strong>Where tools like Docker, Node, Java install to.</strong> <code>/usr/local/bin</code> holds executables, <code>/usr/local/lib</code> holds libraries. When you <code>sudo make install</code>, it lands here.' },
+            { name: '/opt', icon: 'O', desc: 'Optional self-contained packages', devops: true, detail: '<strong>Self-contained apps go here.</strong> Unlike /usr/local (split into bin/lib), /opt keeps a whole app in one folder: <code>/opt/prometheus/</code>, <code>/opt/grafana/</code>. Common for databases and monitoring tools.' },
+            { name: '/home', icon: 'H', desc: 'User directories', devops: false, detail: 'Each user has a subdirectory: <code>/home/ubuntu</code>. SSH keys live at <code>/home/ubuntu/.ssh/authorized_keys</code>. The root user uses <code>/root</code> instead.' },
+            { name: '/bin & /sbin', icon: 'B', desc: 'Essential system binaries', devops: false, detail: '<strong>/bin</strong> has commands all users need: <code>ls</code>, <code>cp</code>, <code>grep</code>. <strong>/sbin</strong> has admin commands: <code>fdisk</code>, <code>ifconfig</code>. On modern systems these often link to /usr/bin.' },
+            { name: '/tmp', icon: 'T', desc: 'Temporary files (cleared on reboot)', devops: false, detail: 'Processes write temp files here. Cleared on every reboot. Useful for quick scratch space in scripts but never store important data here.' },
+            { name: '/dev', icon: 'D', desc: 'Device files', devops: false, detail: 'Hardware is represented as files: <code>/dev/sda</code> (disk), <code>/dev/null</code> (discard output), <code>/dev/random</code> (entropy). Useful to know but rarely touched directly.' },
+            { name: '/boot', icon: 'K', desc: 'Boot loader & kernel files', devops: false, detail: 'Kernel images and GRUB boot loader live here. Rarely touched unless managing kernel upgrades. <strong>Do not delete anything here.</strong>' },
+            { name: '/media & /mnt', icon: 'M', desc: 'Mount points for storage', devops: false, detail: '<code>/media</code> is for auto-mounted removable media. <code>/mnt</code> is for manual mounts: <code>mount /dev/sdb1 /mnt/data</code>. Common in cloud when attaching extra volumes.' }
         ];
         var tree = document.getElementById('lsw-fstree');
         var detail = document.getElementById('lsw-fsdetail');
@@ -876,10 +926,23 @@
                 return lbl + ': ' + (!!(d & 4) ? 'r' : '-') + (!!(d & 2) ? 'w' : '-') + (!!(d & 1) ? 'x' : '-') + ' (' + d + ')';
             });
             document.getElementById('lsw-permdesc').textContent = lbls.join(' | ');
-            document.getElementById('lsw-permslider').value = val;
-            document.getElementById('lsw-permval').textContent = s;
+            document.getElementById('lsw-perminput').value = s;
+        }
+        function lswHandlePermInput(v) {
+            var sanitized = (v || '').replace(/[^0-7]/g, '').slice(0, 3);
+            document.getElementById('lsw-perminput').value = sanitized;
+            if (sanitized.length === 3) {
+                lswUpdatePerm(sanitized);
+            }
+        }
+        function lswNormalizePermInput(input) {
+            var raw = (input.value || '').replace(/[^0-7]/g, '');
+            var normalized = raw.length ? raw.padStart(3, '0').slice(-3) : '000';
+            lswUpdatePerm(normalized);
         }
         window.lswUpdatePerm = lswUpdatePerm;
+        window.lswHandlePermInput = lswHandlePermInput;
+        window.lswNormalizePermInput = lswNormalizePermInput;
         window.lswSetPerm = function (v) { lswUpdatePerm(v); };
         lswUpdatePerm(754);
 
