@@ -1,8 +1,8 @@
 ---
-layout: default
-title: Docker — Intro & Basics
-nav_order: 6
-parent: Lessons
+layout: page
+title: 7. Docker — Intro & Basics
+permalink: /docker-session/
+nav_order: 7
 ---
 
 # Docker — Intro & Basics
