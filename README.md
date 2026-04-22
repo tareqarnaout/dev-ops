@@ -29,6 +29,7 @@ This course introduces the core ideas and practical workflow of modern DevOps, w
 - [Course Schedule]({{ '/schedule/' | relative_url }})
 - [Assignments]({{ '/assignments/' | relative_url }})
 - [All Slides]({{ '/slides-page/' | relative_url }})
+- [Deployment Strategies]({{ '/deployment-strategies/' | relative_url }})
 
 ## Course Approach
 

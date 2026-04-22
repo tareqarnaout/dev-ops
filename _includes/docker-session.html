@@ -1,0 +1,327 @@
+<div class="dkw">
+<style>
+.dkw { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; }
+.dkw *, .dkw *::before, .dkw *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.dkw-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.dkw-nav button { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.15); background: transparent; color: #5f5e5a; cursor: pointer; transition: all .15s; font-family: inherit; }
+.dkw-nav button:hover, .dkw-nav button.on { background: #f6f6f4; color: #1a1a18; border-color: rgba(0,0,0,0.28); }
+.dkw-nav button.on { font-weight: 500; }
+.dkw-sec { display: none; }
+.dkw-sec.on { display: block; }
+.dkw-sec h2 { font-size: 20px; font-weight: 500; margin-bottom: 4px; color: #1a1a18; }
+.dkw-sub { font-size: 13px; color: #5f5e5a; margin-bottom: 1.5rem; }
+.dkw-tip { margin-top: 1.2rem; padding: 10px 14px; border-left: 3px solid #1D9E75; background: #E1F5EE; font-size: 12px; color: #085041; line-height: 1.7; }
+.dkw-tip strong { color: #04342C; }
+.dkw-tip code { background: rgba(4,52,44,.1); padding: 1px 5px; border-radius: 3px; font-family: "SFMono-Regular", Consolas, monospace; font-size: 11px; }
+.dkw-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
+.dkw-badge-key { background: #E6F1FB; color: #0C447C; }
+.dkw-badge-warn { background: #FAEEDA; color: #633806; }
+.dkw-cmd-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
+.dkw-card { border: 1px solid rgba(0,0,0,0.1); border-radius: 10px; padding: 12px 14px; background: #fff; cursor: pointer; transition: border-color .15s; }
+.dkw-card:hover { border-color: rgba(0,0,0,0.28); background: #f6f6f4; }
+.dkw-card-code { font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px; font-weight: 600; color: #1a1a18; margin-bottom: 4px; word-break: break-all; }
+.dkw-card-desc { font-size: 12px; color: #5f5e5a; }
+.dkw-card-ex { margin-top: 8px; font-family: "SFMono-Regular", Consolas, monospace; font-size: 11px; background: #f6f6f4; padding: 6px 8px; border-radius: 4px; color: #5f5e5a; display: none; white-space: pre; overflow-x: auto; border: 1px solid rgba(0,0,0,0.08); }
+.dkw-card.open .dkw-card-ex { display: block; }
+.dkw-pill { padding: 5px 12px; border-radius: 6px; font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px; font-weight: 500; white-space: nowrap; display: inline-block; }
+.dkw-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; font-size: 13px; flex-wrap: wrap; }
+.dkw-tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 1rem; }
+.dkw-tbl th { text-align: left; padding: 8px 12px; font-size: 12px; color: #5f5e5a; border-bottom: 1px solid rgba(0,0,0,0.1); font-weight: 400; }
+.dkw-tbl td { padding: 9px 12px; border-bottom: 1px solid rgba(0,0,0,0.08); color: #5f5e5a; vertical-align: top; }
+.dkw-tbl td:first-child { font-family: "SFMono-Regular", Consolas, monospace; font-weight: 600; color: #1a1a18; white-space: nowrap; font-size: 12px; }
+.dkw-box { border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; background: #fff; }
+.dkw-box-title { font-size: 12px; font-weight: 500; color: #1a1a18; margin-bottom: 8px; }
+.dkw-concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 1.2rem; }
+.dkw-concept { border: 1px solid rgba(0,0,0,0.1); border-radius: 10px; padding: 14px; background: #fff; cursor: pointer; transition: all .15s; }
+.dkw-concept:hover, .dkw-concept.sel { background: #f6f6f4; border-color: rgba(0,0,0,0.28); }
+.dkw-concept-icon { font-size: 20px; margin-bottom: 8px; }
+.dkw-concept-name { font-size: 13px; font-weight: 500; color: #1a1a18; margin-bottom: 4px; }
+.dkw-concept-short { font-size: 12px; color: #5f5e5a; }
+.dkw-detail { padding: 12px 14px; border-left: 3px solid rgba(0,0,0,0.15); background: #f6f6f4; font-size: 13px; color: #5f5e5a; line-height: 1.7; margin-bottom: 1rem; display: none; }
+.dkw-detail.on { display: block; }
+.dkw-detail strong { color: #1a1a18; }
+.dkw-detail code { font-family: "SFMono-Regular", Consolas, monospace; font-size: 11px; background: rgba(0,0,0,0.07); padding: 1px 4px; border-radius: 3px; }
+.dkw-lifecycle { display: flex; flex-direction: column; gap: 0; margin-bottom: 1.5rem; }
+.dkw-lc-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.08); }
+.dkw-lc-item:last-child { border-bottom: none; }
+.dkw-lc-dot { width: 56px; min-width: 56px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; margin-top: 2px; }
+.dkw-lc-text { flex: 1; }
+.dkw-lc-cmd { font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px; font-weight: 600; color: #1a1a18; margin-bottom: 2px; word-break: break-all; }
+.dkw-lc-desc { font-size: 12px; color: #5f5e5a; line-height: 1.5; }
+.dkw-net-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; margin-bottom: 8px; background: #fff; flex-wrap: wrap; }
+.dkw-net-name { font-family: "SFMono-Regular", Consolas, monospace; font-size: 13px; font-weight: 600; color: #1a1a18; min-width: 80px; }
+.dkw-net-desc { font-size: 12px; color: #5f5e5a; flex: 1; }
+.dkw-net-desc code { font-family: "SFMono-Regular", Consolas, monospace; font-size: 11px; background: rgba(0,0,0,0.07); padding: 1px 4px; border-radius: 3px; }
+.dkw-compose-block { background: #f6f6f4; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; padding: 14px; font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px; color: #5f5e5a; line-height: 1.9; white-space: pre; overflow-x: auto; margin-bottom: 1rem; }
+.dkw-compose-block .k { color: #185FA5; }
+.dkw-compose-block .v { color: #1D9E75; }
+.dkw-compose-block .c { color: #888780; }
+.dkw-diagram-wrap { overflow-x: auto; margin-bottom: 1.5rem; }
+</style>
+
+<div class="dkw-nav">
+  <button class="on" onclick="dkwShow('dkw-intro', this)">What is Docker?</button>
+  <button onclick="dkwShow('dkw-concepts', this)">Core concepts</button>
+  <button onclick="dkwShow('dkw-images', this)">Images</button>
+  <button onclick="dkwShow('dkw-containers', this)">Containers</button>
+  <button onclick="dkwShow('dkw-networking', this)">Networking &amp; volumes</button>
+  <button onclick="dkwShow('dkw-compose', this)">Docker Compose</button>
+</div>
+
+<!-- INTRO -->
+<div id="dkw-intro" class="dkw-sec on">
+  <h2>What is Docker?</h2>
+  <p class="dkw-sub">Docker packages your app and everything it needs into an isolated, portable unit called a container.</p>
+  <div class="dkw-diagram-wrap">
+    <svg width="100%" viewBox="0 0 680 310" role="img" xmlns="http://www.w3.org/2000/svg" style="min-width:480px">
+      <title>Docker vs traditional deployment</title>
+      <desc>Left shows three apps with conflicting dependency versions on one shared OS. Right shows three isolated containers each with their own dependencies running on Docker Engine.</desc>
+      <text x="170" y="22" text-anchor="middle" style="font-size:12px;fill:#5f5e5a;font-family:inherit">Traditional</text>
+      <text x="510" y="22" text-anchor="middle" style="font-size:12px;fill:#5f5e5a;font-family:inherit">With Docker</text>
+      <line x1="340" y1="10" x2="340" y2="300" stroke="rgba(0,0,0,0.1)" stroke-width="1" stroke-dasharray="4 4"/>
+      <rect x="40" y="260" width="260" height="36" rx="6" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+      <text x="170" y="278" text-anchor="middle" dominant-baseline="central" style="font-size:13px;font-weight:500;fill:#444441;font-family:inherit">Server / bare metal</text>
+      <rect x="40" y="210" width="260" height="38" rx="6" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+      <text x="170" y="229" text-anchor="middle" dominant-baseline="central" style="font-size:13px;font-weight:500;fill:#712B13;font-family:inherit">Host OS</text>
+      <rect x="40" y="155" width="75" height="44" rx="6" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+      <text x="77" y="177" text-anchor="middle" dominant-baseline="central" style="font-size:13px;font-weight:500;fill:#3C3489;font-family:inherit">App A</text>
+      <rect x="132" y="155" width="75" height="44" rx="6" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+      <text x="169" y="177" text-anchor="middle" dominant-baseline="central" style="font-size:13px;font-weight:500;fill:#3C3489;font-family:inherit">App B</text>
+      <rect x="224" y="155" width="75" height="44" rx="6" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+      <text x="261" y="177" text-anchor="middle" dominant-baseline="central" style="font-size:13px;font-weight:500;fill:#3C3489;font-family:inherit">App C</text>
+      <rect x="40" y="100" width="75" height="44" rx="6" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <text x="77" y="122" text-anchor="middle" dominant-baseline="central" style="font-size:12px;fill:#633806;font-family:inherit">Deps v1</text>
+      <rect x="132" y="100" width="75" height="44" rx="6" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <text x="169" y="122" text-anchor="middle" dominant-baseline="central" style="font-size:12px;fill:#633806;font-family:inherit">Deps v3</text>
+      <rect x="224" y="100" width="75" height="44" rx="6" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <text x="261" y="122" text-anchor="middle" dominant-baseline="central" style="font-size:12px;fill:#633806;font-family:inherit">Deps v2</text>
+      <text x="170" y="88" text-anchor="middle" style="font-size:11px;fill:#993C1D;font-family:inherit">version conflicts!</text>
+      <rect x="360" y="260" width="280" height="36" rx="6" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+      <text x="500" y="278" text-anchor="middle" dominant-baseline="central" style="font-size:13px;font-weight:500;fill:#444441;font-family:inherit">Server / bare metal</text>
+      <rect x="360" y="210" width="280" height="38" rx="6" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+      <text x="500" y="229" text-anchor="middle" dominant-baseline="central" style="font-size:13px;font-weight:500;fill:#712B13;font-family:inherit">Host OS</text>
+      <rect x="360" y="160" width="280" height="38" rx="6" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+      <text x="500" y="179" text-anchor="middle" dominant-baseline="central" style="font-size:13px;font-weight:500;fill:#0C447C;font-family:inherit">Docker Engine</text>
+      <rect x="368" y="80" width="82" height="70" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+      <text x="409" y="107" text-anchor="middle" dominant-baseline="central" style="font-size:13px;font-weight:500;fill:#085041;font-family:inherit">App A</text>
+      <text x="409" y="127" text-anchor="middle" dominant-baseline="central" style="font-size:12px;fill:#0F6E56;font-family:inherit">Deps v1</text>
+      <rect x="459" y="80" width="82" height="70" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+      <text x="500" y="107" text-anchor="middle" dominant-baseline="central" style="font-size:13px;font-weight:500;fill:#085041;font-family:inherit">App B</text>
+      <text x="500" y="127" text-anchor="middle" dominant-baseline="central" style="font-size:12px;fill:#0F6E56;font-family:inherit">Deps v3</text>
+      <rect x="550" y="80" width="82" height="70" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+      <text x="591" y="107" text-anchor="middle" dominant-baseline="central" style="font-size:13px;font-weight:500;fill:#085041;font-family:inherit">App C</text>
+      <text x="591" y="127" text-anchor="middle" dominant-baseline="central" style="font-size:12px;fill:#0F6E56;font-family:inherit">Deps v2</text>
+      <text x="500" y="68" text-anchor="middle" style="font-size:11px;fill:#085041;font-family:inherit">each container is isolated</text>
+    </svg>
+  </div>
+  <div class="dkw-row">
+    <span class="dkw-pill" style="background:#E1F5EE;color:#085041">Problem it solves</span>
+    <span style="font-size:13px;color:#5f5e5a;padding-top:4px">"Works on my machine" - Docker makes every environment identical: dev, staging, production.</span>
+  </div>
+  <div class="dkw-row" style="margin-top:8px">
+    <span class="dkw-pill" style="background:#E6F1FB;color:#0C447C">vs Virtual Machine</span>
+    <span style="font-size:13px;color:#5f5e5a;padding-top:4px">VMs virtualise the hardware (full OS per app). Containers share the host OS kernel - much lighter, starts in milliseconds.</span>
+  </div>
+  <div class="dkw-tip"><strong>Mental model:</strong> an image is a recipe. A container is a dish made from that recipe. You can make many containers from one image, and each runs independently.</div>
+</div>
+
+<!-- CONCEPTS -->
+<div id="dkw-concepts" class="dkw-sec">
+  <h2>Core concepts</h2>
+  <p class="dkw-sub">Click each concept to learn more.</p>
+  <div class="dkw-concept-grid" id="dkw-cg"></div>
+  <div class="dkw-detail" id="dkw-cd"></div>
+  <div class="dkw-tip"><strong>The flow:</strong> write a <strong>Dockerfile</strong> -> build an <strong>Image</strong> -> run a <strong>Container</strong> -> push the image to a <strong>Registry</strong> so others can pull it.</div>
+</div>
+
+<!-- IMAGES -->
+<div id="dkw-images" class="dkw-sec">
+  <h2>Working with images</h2>
+  <p class="dkw-sub">Click any command card to see a real terminal example.</p>
+  <div class="dkw-cmd-grid" id="dkw-img-grid"></div>
+  <div style="margin-top:1.5rem">
+    <div class="dkw-box-title" style="font-size:13px;font-weight:500;margin-bottom:10px">Sample Dockerfile</div>
+    <div class="dkw-compose-block"><span class="k">FROM</span> <span class="v">node:20-alpine</span>          <span class="c"># base image</span>
+<span class="k">WORKDIR</span> <span class="v">/app</span>                    <span class="c"># working dir inside container</span>
+<span class="k">COPY</span> <span class="v">package*.json ./</span>           <span class="c"># copy deps first (layer caching)</span>
+<span class="k">RUN</span> <span class="v">npm install</span>                 <span class="c"># install inside image</span>
+<span class="k">COPY</span> <span class="v">. .</span>                        <span class="c"># copy rest of source</span>
+<span class="k">EXPOSE</span> <span class="v">3000</span>                     <span class="c"># document the port</span>
+<span class="k">CMD</span> <span class="v">["node", "server.js"]</span>       <span class="c"># default start command</span></div>
+  </div>
+  <div class="dkw-tip"><strong>Layer caching tip:</strong> copy <code>package.json</code> and run <code>npm install</code> before copying your source code. Dependencies change less often - Docker caches that layer and rebuilds only what changed.</div>
+</div>
+
+<!-- CONTAINERS -->
+<div id="dkw-containers" class="dkw-sec">
+  <h2>Container lifecycle</h2>
+  <p class="dkw-sub">A container moves through these states. Click any command card for an example.</p>
+  <div class="dkw-lifecycle" id="dkw-lc"></div>
+  <div class="dkw-cmd-grid" id="dkw-con-grid"></div>
+  <div class="dkw-tip"><strong>Most used flags:</strong> <code>-d</code> runs detached (background), <code>-p 8080:3000</code> maps host port 8080 to container port 3000, <code>--rm</code> auto-deletes on stop, <code>--name</code> gives it a memorable name.</div>
+</div>
+
+<!-- NETWORKING & VOLUMES -->
+<div id="dkw-networking" class="dkw-sec">
+  <h2>Networking &amp; volumes</h2>
+  <p class="dkw-sub">Containers are isolated by default - you must explicitly connect them.</p>
+  <div class="dkw-box-title" style="font-size:13px;font-weight:500;margin-bottom:8px">Network drivers</div>
+  <div class="dkw-net-row">
+    <div class="dkw-net-name">bridge</div>
+    <div class="dkw-net-desc">Default. Container gets its own IP; use <code>-p</code> to expose ports to the host.</div>
+    <span class="dkw-badge dkw-badge-key">default</span>
+  </div>
+  <div class="dkw-net-row">
+    <div class="dkw-net-name">host</div>
+    <div class="dkw-net-desc">Container shares the host network stack directly. No port mapping needed - but no isolation either.</div>
+  </div>
+  <div class="dkw-net-row">
+    <div class="dkw-net-name">none</div>
+    <div class="dkw-net-desc">No networking at all. Fully isolated - useful for batch jobs that only read/write files.</div>
+  </div>
+  <div class="dkw-net-row">
+    <div class="dkw-net-name">custom</div>
+    <div class="dkw-net-desc">User-defined bridge. Containers on the same network can reach each other by container name (built-in DNS).</div>
+    <span class="dkw-badge dkw-badge-key">recommended</span>
+  </div>
+  <div style="margin-top:1.5rem;margin-bottom:8px" class="dkw-box-title">Volumes - persisting data</div>
+  <div style="overflow-x:auto">
+    <table class="dkw-tbl">
+      <tr><th>Type</th><th>What it is</th><th>Use when</th></tr>
+      <tr><td>-v myvolume:/data</td><td>Named volume - Docker manages storage location</td><td>Databases, persistent state</td></tr>
+      <tr><td>-v $(pwd):/app</td><td>Bind mount - maps a host directory directly</td><td>Local dev (live code reload)</td></tr>
+      <tr><td>--tmpfs /tmp</td><td>In-memory, not persisted to disk</td><td>Sensitive temp data</td></tr>
+    </table>
+  </div>
+  <div class="dkw-tip"><strong>Key insight:</strong> containers are ephemeral - when they stop, their data is gone. Use <code>docker volume create</code> and mount it to keep data alive across restarts. Databases always need a volume.</div>
+</div>
+
+<!-- COMPOSE -->
+<div id="dkw-compose" class="dkw-sec">
+  <h2>Docker Compose</h2>
+  <p class="dkw-sub">Define and run multi-container apps with a single YAML file.</p>
+  <div class="dkw-compose-block"><span class="k">version</span>: <span class="v">'3.9'</span>
+
+<span class="k">services</span>:
+  <span class="k">web</span>:
+    <span class="k">build</span>: <span class="v">.</span>                      <span class="c"># build from local Dockerfile</span>
+    <span class="k">ports</span>:
+      - <span class="v">"3000:3000"</span>
+    <span class="k">environment</span>:
+      - <span class="v">DATABASE_URL=postgres://db/myapp</span>
+    <span class="k">depends_on</span>:
+      - <span class="v">db</span>                       <span class="c"># wait for db to start first</span>
+
+  <span class="k">db</span>:
+    <span class="k">image</span>: <span class="v">postgres:16-alpine</span>    <span class="c"># pull from Docker Hub</span>
+    <span class="k">volumes</span>:
+      - <span class="v">pgdata:/var/lib/postgresql/data</span>
+    <span class="k">environment</span>:
+      - <span class="v">POSTGRES_PASSWORD=secret</span>
+
+<span class="k">volumes</span>:
+  <span class="k">pgdata</span>:                        <span class="c"># named volume, managed by Docker</span></div>
+  <div class="dkw-cmd-grid" id="dkw-compose-grid"></div>
+  <div class="dkw-tip"><strong>Why Compose?</strong> Instead of running 4 separate <code>docker run</code> commands with all their flags, one <code>docker compose up</code> starts your entire stack. The file lives in version control - any developer can clone and run in one command.</div>
+</div>
+
+</div><!-- end .dkw -->
+
+<script>
+(function () {
+  var concepts = [
+    { icon: '📄', name: 'Dockerfile', short: 'Build instructions', detail: '<strong>A text file that defines how to build your image.</strong> Each line is a layer (FROM, RUN, COPY, EXPOSE, CMD). Docker caches layers - unchanged layers reuse the cache, making rebuilds fast. Always start with an official base image like <code>node:20-alpine</code> or <code>python:3.12-slim</code>.' },
+    { icon: '📦', name: 'Image', short: 'Immutable snapshot', detail: '<strong>A read-only template built from a Dockerfile.</strong> Tagged with a name and version: <code>myapp:1.0</code> or <code>nginx:latest</code>. Images are immutable - you never modify one, you build a new version. Stored locally or in a registry.' },
+    { icon: '🏃', name: 'Container', short: 'Running instance', detail: '<strong>A live, running instance of an image.</strong> Containers are ephemeral - designed to be started, stopped, and replaced. Any writes inside a container are lost when removed unless you use a volume. You can run many containers from one image simultaneously.' },
+    { icon: '🗄️', name: 'Registry', short: 'Image storage & sharing', detail: '<strong>A server that stores and distributes images.</strong> Docker Hub is the public default - <code>docker pull nginx</code> fetches from there. In production use a private registry: AWS ECR, GitHub Container Registry, or self-hosted. <code>docker push</code> uploads, <code>docker pull</code> downloads.' },
+    { icon: '🔗', name: 'Volume', short: 'Persistent data', detail: '<strong>A way to persist data outside the container lifecycle.</strong> Databases, uploads, and any state that should survive a restart must live in a volume. Named volumes (<code>-v pgdata:/var/lib/postgresql/data</code>) are managed by Docker; bind mounts map a host directory directly.' },
+    { icon: '🌐', name: 'Network', short: 'Container communication', detail: '<strong>How containers talk to each other and to the outside world.</strong> By default containers are isolated. Create a custom bridge network and containers on it can reach each other by name - no hardcoded IPs. Port mapping (<code>-p 8080:3000</code>) exposes a container port to the host.' }
+  ];
+  var cg = document.getElementById('dkw-cg');
+  var cd = document.getElementById('dkw-cd');
+  concepts.forEach(function (c) {
+    var el = document.createElement('div');
+    el.className = 'dkw-concept';
+    el.innerHTML = '<div class="dkw-concept-icon">' + c.icon + '</div><div class="dkw-concept-name">' + c.name + '</div><div class="dkw-concept-short">' + c.short + '</div>';
+    el.onclick = function () {
+      document.querySelectorAll('.dkw-concept').forEach(function (x) { x.classList.remove('sel'); });
+      el.classList.add('sel');
+      cd.innerHTML = c.detail;
+      cd.classList.add('on');
+    };
+    cg.appendChild(el);
+  });
+
+  var imgCmds = [
+    { cmd: 'docker build -t myapp:1.0 .', desc: 'Build image from Dockerfile in current dir', ex: '$ docker build -t myapp:1.0 .\n[+] Building 12.3s\nStep 1/6 : FROM node:20-alpine\nStep 2/6 : WORKDIR /app\n...\nSuccessfully tagged myapp:1.0' },
+    { cmd: 'docker images', desc: 'List all local images', ex: 'REPOSITORY   TAG       IMAGE ID       SIZE\nmyapp        1.0       a3f4b2c1d9e0   142MB\nnginx        latest    b692a91e4e15   191MB' },
+    { cmd: 'docker pull nginx:latest', desc: 'Download image from Docker Hub', ex: '$ docker pull nginx:latest\nlatest: Pulling from library/nginx\nDigest: sha256:abc123...\nStatus: Downloaded newer image for nginx:latest' },
+    { cmd: 'docker push myapp:1.0', desc: 'Upload image to a registry', ex: '$ docker push registry.io/myapp:1.0\nPushing to registry.io/myapp:1.0\n1.0: digest: sha256:abc... size: 1847' },
+    { cmd: 'docker rmi myapp:1.0', desc: 'Remove a local image', ex: '$ docker rmi myapp:1.0\nUntagged: myapp:1.0\nDeleted: sha256:a3f4b2...' },
+    { cmd: 'docker image prune', desc: 'Remove all unused images', ex: '$ docker image prune\nTotal reclaimed space: 2.3GB' }
+  ];
+  var ig = document.getElementById('dkw-img-grid');
+  imgCmds.forEach(function (c) {
+    var el = document.createElement('div');
+    el.className = 'dkw-card';
+    el.innerHTML = '<div class="dkw-card-code">' + c.cmd + '</div><div class="dkw-card-desc">' + c.desc + '</div><pre class="dkw-card-ex">' + c.ex + '</pre>';
+    el.onclick = function () { el.classList.toggle('open'); };
+    ig.appendChild(el);
+  });
+
+  var lifecycle = [
+    { dot: '#E1F5EE', dotText: '#085041', label: 'create', cmd: 'docker create --name myapp myapp:1.0', desc: 'Creates a container but does not start it. Rarely used directly - usually combined with run.' },
+    { dot: '#E6F1FB', dotText: '#0C447C', label: 'start', cmd: 'docker run -d -p 8080:3000 --name myapp myapp:1.0', desc: 'Creates AND starts. The most common command. -d runs it in the background (detached).' },
+    { dot: '#FAEEDA', dotText: '#633806', label: 'running', cmd: 'docker ps', desc: 'Container is alive and running. docker ps lists running containers; docker ps -a shows stopped ones too.' },
+    { dot: '#FAEEDA', dotText: '#633806', label: 'exec', cmd: 'docker exec -it myapp sh', desc: 'Open a shell inside a running container. -it = interactive + TTY. Great for debugging live issues.' },
+    { dot: '#FAECE7', dotText: '#712B13', label: 'stop', cmd: 'docker stop myapp', desc: 'Sends SIGTERM, waits 10s, then SIGKILL. Graceful shutdown. Use docker kill for immediate stop.' },
+    { dot: '#F1EFE8', dotText: '#444441', label: 'remove', cmd: 'docker rm myapp', desc: 'Permanently deletes the container. Use docker rm -f to force-remove a running one. The image is kept.' }
+  ];
+  var lc = document.getElementById('dkw-lc');
+  lifecycle.forEach(function (l) {
+    var el = document.createElement('div');
+    el.className = 'dkw-lc-item';
+    el.innerHTML = '<div class="dkw-lc-dot" style="background:' + l.dot + ';color:' + l.dotText + '">' + l.label + '</div><div class="dkw-lc-text"><div class="dkw-lc-cmd">' + l.cmd + '</div><div class="dkw-lc-desc">' + l.desc + '</div></div>';
+    lc.appendChild(el);
+  });
+
+  var conCmds = [
+    { cmd: 'docker logs myapp', desc: 'View container stdout/stderr output', ex: '$ docker logs myapp\n[server] Listening on port 3000\n[db] Connected to postgres\n\n# follow live:\n$ docker logs -f myapp' },
+    { cmd: 'docker inspect myapp', desc: 'Full JSON config and state of a container', ex: '$ docker inspect myapp\n[{ "Id": "a3f4...",\n   "State": { "Running": true },\n   "NetworkSettings": {\n     "IPAddress": "172.17.0.2" } }]' },
+    { cmd: 'docker stats', desc: 'Live CPU, memory, network usage', ex: 'CONTAINER   CPU %   MEM USAGE / LIMIT\nmyapp       2.31%   128MiB / 2GiB\nnginx       0.04%   6MiB / 2GiB' },
+    { cmd: 'docker cp file.txt myapp:/app/', desc: 'Copy files to/from a running container', ex: '$ docker cp ./config.json myapp:/app/config.json\n# also works in reverse:\n$ docker cp myapp:/app/logs/app.log ./app.log' }
+  ];
+  var cg2 = document.getElementById('dkw-con-grid');
+  conCmds.forEach(function (c) {
+    var el = document.createElement('div');
+    el.className = 'dkw-card';
+    el.innerHTML = '<div class="dkw-card-code">' + c.cmd + '</div><div class="dkw-card-desc">' + c.desc + '</div><pre class="dkw-card-ex">' + c.ex + '</pre>';
+    el.onclick = function () { el.classList.toggle('open'); };
+    cg2.appendChild(el);
+  });
+
+  var composeCmds = [
+    { cmd: 'docker compose up', desc: 'Start all services (builds images if needed)', ex: '$ docker compose up\n[+] Running 2/2\n  Container myapp-db-1   Started\n  Container myapp-web-1  Started\n\n# run in background:\n$ docker compose up -d' },
+    { cmd: 'docker compose down', desc: 'Stop and remove containers and networks', ex: '$ docker compose down\n[+] Running 2/2\n  Container myapp-web-1  Removed\n  Container myapp-db-1   Removed\n\n# also remove volumes:\n$ docker compose down -v' },
+    { cmd: 'docker compose logs -f web', desc: 'Stream logs from a specific service', ex: '$ docker compose logs -f web\nweb-1  | [server] Listening on port 3000\nweb-1  | GET / 200 12ms' },
+    { cmd: 'docker compose build', desc: 'Rebuild images without starting services', ex: '$ docker compose build web\n[+] Building 8.2s\nStep 1/6 : FROM node:20-alpine\n...\nSuccessfully built 8e3a2f1c' },
+    { cmd: 'docker compose ps', desc: 'Show status of all services', ex: 'NAME            STATUS     PORTS\nmyapp-web-1     running    0.0.0.0:3000->3000/tcp\nmyapp-db-1      running    5432/tcp' },
+    { cmd: 'docker compose exec web sh', desc: 'Open a shell in a running service', ex: '$ docker compose exec web sh\n/app # ls\nnode_modules  package.json  server.js' }
+  ];
+  var cpg = document.getElementById('dkw-compose-grid');
+  composeCmds.forEach(function (c) {
+    var el = document.createElement('div');
+    el.className = 'dkw-card';
+    el.innerHTML = '<div class="dkw-card-code">' + c.cmd + '</div><div class="dkw-card-desc">' + c.desc + '</div><pre class="dkw-card-ex">' + c.ex + '</pre>';
+    el.onclick = function () { el.classList.toggle('open'); };
+    cpg.appendChild(el);
+  });
+
+  window.dkwShow = function (id, btn) {
+    document.querySelectorAll('.dkw-sec').forEach(function (s) { s.classList.remove('on'); });
+    document.getElementById(id).classList.add('on');
+    document.querySelectorAll('.dkw-nav button').forEach(function (b) { b.classList.remove('on'); });
+    btn.classList.add('on');
+  };
+})();
+</script>
