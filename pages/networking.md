@@ -61,18 +61,48 @@ docker run --network none nginx
  [Container B] --┘
 ```
 
-On a **custom bridge network**, containers can reach each other by **container name** (DNS resolution built-in):
+On a **custom bridge network**, containers can reach each other by **container name** (DNS resolution built-in).
+
+### Step 1: Create the Custom Network
+
+First, create a user-defined bridge network so the containers can resolve each other by name.
 
 ```bash
-# Create custom network
-docker network create mynet
+docker network create my-db-network
+```
 
-# Run containers on it
-docker run --network mynet --name db postgres
-docker run --network mynet --name app myapp
+### Step 2: Start the Database Container
 
-# Inside "app", you can reach "db" by name:
-ping db
+Run the official `postgres` image from Docker Hub. Attach it to your new network and give it a specific name (`my-postgres`).
+
+```bash
+docker run -d \
+  --name my-postgres \
+  --network my-db-network \
+  -e POSTGRES_PASSWORD=mysecretpassword \
+  postgres
+```
+
+### Step 3: Start the Web App Container
+
+Run the official `adminer` image. Attach it to the same network and expose its web interface to your local machine on port `8080`.
+
+```bash
+docker run -d \
+  --name my-adminer \
+  --network my-db-network \
+  -p 8080:8080 \
+  adminer
+```
+
+### How the DNS Resolution Happens in Practice
+
+If you open your web browser and go to `http://localhost:8080`, you will see the Adminer login screen.
+
+When Adminer asks for the **Server** to connect to, you do not type an IP address. Instead, you simply type:
+
+```text
+my-postgres
 ```
 
 > On the **default** bridge network, name-based DNS does **not** work - you must use IPs.
