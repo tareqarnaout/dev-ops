@@ -133,23 +133,92 @@ docker network disconnect mynet mycontainer
 ## Real-world Example (docker-compose)
 
 ```yaml
+# docker-compose.yml
+
 services:
-  app:
-    image: myapp
-    networks:
-      - backend
 
+  # ---------------------------------------------------------
+  # WEB SERVICE (Your Custom Application)
+  # ---------------------------------------------------------
+  web:
+    # Builds the Docker container from the Dockerfile in this directory
+    build: .
+    container_name: my-web-app
+
+    # Maps port 8080 on your physical machine to port 80 inside the container
+    ports:
+      - "8080:80"
+
+    # Injects all variables from your .env file into this container.
+    # Your code will use these (like DB_HOST=db) to connect to other services.
+    env_file:
+      - .env
+
+    # Attaches to our custom network so it can resolve the name 'db' to an IP
+    networks:
+      - app-network
+
+    # Prevents this container from booting up until the database and cache are ready
+    depends_on:
+      - db
+      - cache
+
+  # ---------------------------------------------------------
+  # DATABASE SERVICE (PostgreSQL)
+  # ---------------------------------------------------------
   db:
-    image: postgres
-    networks:
-      - backend
+    image: postgres:15-alpine
+    container_name: my-postgres-db
 
+    # Automatically boots the database back up if your computer restarts
+    restart: unless-stopped
+
+    # Loads the exact same .env file. The official Postgres image automatically
+    # looks for POSTGRES_USER and POSTGRES_PASSWORD to set up the initial admin account.
+    env_file:
+      - .env
+
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+    # Mounts a permanent storage space. Without this, all your tables and
+    # user data would be permanently deleted the moment the container stops.
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # ---------------------------------------------------------
+  # CACHE SERVICE (Redis)
+  # ---------------------------------------------------------
+  cache:
+    image: redis:7-alpine
+    container_name: my-redis-cache
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+# ---------------------------------------------------------
+# CUSTOM NETWORKS
+# ---------------------------------------------------------
 networks:
-  backend:
+  app-network:
+    # The bridge driver creates an isolated network that features an
+    # embedded DNS server, allowing containers to talk via their names.
     driver: bridge
+
+# ---------------------------------------------------------
+# PERSISTENT VOLUMES
+# ---------------------------------------------------------
+volumes:
+  # Registers the named volume with Docker so it can allocate secure
+  # hard drive space on your host OS for the database to use.
+  pgdata:
 ```
 
-Here, `app` can reach `db` just by using the hostname `db` - Docker handles the DNS automatically.
+Here, `web` can reach `db` and `cache` just by using the hostnames `db` and `cache` on `app-network` - Docker handles the DNS automatically.
 
 ---
 
