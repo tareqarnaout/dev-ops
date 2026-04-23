@@ -1,8 +1,8 @@
 ---
 layout: page
-title: 7. Docker — Intro & Basics
+title: 4. Docker Intro
 permalink: /docker-session/
-nav_order: 7
+nav_order: 4
 ---
 
 # Docker — Intro & Basics

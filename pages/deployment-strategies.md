@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "5. Deployment Strategies"
+title: "7. Deployment"
 description: Interactive guide to Recreate, Rolling, Blue-Green, and Canary deployment strategies.
 permalink: /deployment-strategies/
 nav_order: 7

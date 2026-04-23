@@ -1,8 +1,8 @@
 ---
 layout: page
-title: 6. Linux Interactive Session
+title: 3. Linux Interactive Session
 permalink: /linux-session/
-nav_order: 6
+nav_order: 3
 ---
 
 # Linux Interactive Session

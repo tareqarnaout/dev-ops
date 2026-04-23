@@ -1,9 +1,9 @@
 ---
 layout: page
-title: "3. Docker Networking"
+title: "6. Docker Networking"
 description: Docker network drivers, container communication, and common network commands.
 permalink: /networking/
-nav_order: 3
+nav_order: 6
 ---
 
 # Docker Networking
