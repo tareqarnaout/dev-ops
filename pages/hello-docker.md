@@ -3,7 +3,7 @@ layout: page
 title: "4.3 Hello Docker - Single Container Project"
 description: A hands-on Flask project to build and run a single-container Docker app from scratch.
 permalink: /hello-docker/
-parent: "4. Projects"
+parent: "8. Projects"
 nav_order: 3
 ---
 
