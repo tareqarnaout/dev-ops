@@ -156,7 +156,14 @@ nav_order: 7
   }
 
   .deployment-strategies-page .why-card:hover { border-color: rgba(0,119,204,0.35); transform: translateY(-2px); }
-  .deployment-strategies-page .why-card .icon { font-size: 24px; margin-bottom: 12px; }
+  .deployment-strategies-page .why-card .why-icon {
+    display: block;
+    width: auto;
+    height: auto;
+    font-size: 24px;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
   .deployment-strategies-page .why-card h3 { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 6px; font-family: 'Space Mono', monospace; }
   .deployment-strategies-page .why-card p { font-size: 12px; color: var(--muted); line-height: 1.6; }
 
@@ -558,12 +565,12 @@ nav_order: 7
     <div class="section active" id="tab-why">
       <div class="s-heading">Why Deployment Strategy Matters</div>
       <div class="why-grid">
-        <div class="why-card"><div class="icon">Time</div><h3>Reduce Downtime</h3><p>Keep services available during releases, maintaining SLAs and user trust.</p></div>
-        <div class="why-card"><div class="icon">Shield</div><h3>Minimize Risk</h3><p>Controlled rollouts reduce the blast radius if a release contains bugs.</p></div>
-        <div class="why-card"><div class="icon">Spark</div><h3>User Experience</h3><p>Seamless updates mean users never notice deployments happening.</p></div>
-        <div class="why-card"><div class="icon">Boost</div><h3>Faster Delivery</h3><p>CI/CD pipelines with solid strategies ship features more frequently.</p></div>
-        <div class="why-card"><div class="icon">Rollback</div><h3>Rollback & Recovery</h3><p>A clear strategy always includes a path back when things go wrong.</p></div>
-        <div class="why-card"><div class="icon">Alert</div><h3>Avoid Incidents</h3><p>No strategy means production incidents waiting to happen.</p></div>
+        <div class="why-card"><div class="why-icon">Time</div><h3>Reduce Downtime</h3><p>Keep services available during releases, maintaining SLAs and user trust.</p></div>
+        <div class="why-card"><div class="why-icon">Shield</div><h3>Minimize Risk</h3><p>Controlled rollouts reduce the blast radius if a release contains bugs.</p></div>
+        <div class="why-card"><div class="why-icon">Spark</div><h3>User Experience</h3><p>Seamless updates mean users never notice deployments happening.</p></div>
+        <div class="why-card"><div class="why-icon">Boost</div><h3>Faster Delivery</h3><p>CI/CD pipelines with solid strategies ship features more frequently.</p></div>
+        <div class="why-card"><div class="why-icon">Rollback</div><h3>Rollback & Recovery</h3><p>A clear strategy always includes a path back when things go wrong.</p></div>
+        <div class="why-card"><div class="why-icon">Alert</div><h3>Avoid Incidents</h3><p>No strategy means production incidents waiting to happen.</p></div>
       </div>
     </div>
 
