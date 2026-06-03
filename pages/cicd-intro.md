@@ -168,38 +168,38 @@ This operational guide maps explicitly to the step-by-step setup compiling a Jav
 Create an optimized script artifact file structured inside `.github/workflows/ci.yml` inside your repository directory system:
 
 ```yaml
-name: Java CI Workstation Automation Pipeline
+name: Java CI Workstation Automation Pipeline # The user-friendly title displayed for this workflow in the GitHub Actions UI dashboard.
 
 # Bind workflow triggers precisely to key branch state changes
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: # Defines the platform event block that specifies the exact system events required to trigger this automation file.
+  push: # Monitors code integrations; triggers the workflow whenever new commits are pushed directly to the repository.
+    branches: [ master ] # Pattern matching filter that limits the push trigger exclusively to changes targeting the 'master' branch.
+  pull_request: # Monitors merge proposals; triggers the workflow when a pull request lifecycle event is opened or synchronized.
+    branches: [ master ] # Pattern matching filter that limits the trigger to PRs aiming to merge code changes into the 'master' branch.
 
-jobs:
-  compile-workspace-job:
-    name: Build & Validate Java Workspace Source
-    runs-on: ubuntu-latest
+jobs: # Container section grouping all independent compilation, packaging, or analysis workloads (jobs) defined in this lifecycle.
+  compile-workspace-job: # The unique machine-readable alphanumeric identifier string used to declare this specific job block.
+    name: Build & Validate Java Workspace Source # The human-readable visual title mapped to this individual job within the tracking UI.
+    runs-on: ubuntu-latest # Allocates a pristine, isolated, GitHub-hosted Linux runner running the latest stable Ubuntu OS kernel.
 
-    steps:
+    steps: # The ordered, sequential block of automation tasks (reusable plugins or shell scripts) executed on the allocated runner.
       # Step 1: Mount the code codebase directory natively onto the current runner local system storage
-      - name: Synchronize Local Repository File Tree Context
-        uses: actions/checkout@v2
+      - name: Synchronize Local Repository File Tree Context # Descriptive label rendering as an expandable row tracking log outputs.
+        uses: actions/checkout@v2 # Retrieves and launches the official repository cloning action plugin to sync project files to the workspace path.
 
       # Step 2: Inject the correct Software Development Kit binary system footprint
-      - name: Initialize Target Java SDK Virtual Environment Layer
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
+      - name: Initialize Target Java SDK Virtual Environment Layer # UI display title documenting the runtime environment preparation step.
+        uses: actions/setup-java@v1 # Employs a packaged marketplace framework utility responsible for downloading and provisioning the JDK tools.
+        with: # Explicit parameter mapping keyword introducing arguments requested by the targeted action configuration.
+          java-version: 1.8 # Dictates the explicit runtime framework target version (Java 8 JDK) to configure globally on the runner system path.
 
       # Step 3: Prevent permission exit exceptions on standard POSIX filesystems
-      - name: Apply Linux POSIX Wrapper Executable Flag Updates
-        run: chmod +x gradlew
+      - name: Apply Linux POSIX Wrapper Executable Flag Updates # Structural display text indicating that file flag mutations are processing.
+        run: chmod +x gradlew # Evaluates a direct Linux shell command granting binary execution rights (+x) to the local Gradle wrapper utility script.
 
       # Step 4: Call the underlying test and compilation suite
-      - name: Execute Full Gradle Lifecycle Compilation
-        run: ./gradlew build
+      - name: Execute Full Gradle Lifecycle Compilation # Primary terminal marker representing the core validation phase of the deployment pipeline.
+        run: ./gradlew build # Executes the local wrapper script to invoke target compilation routines, compile assets, and evaluate unit testing suites.
 
 ```
 
